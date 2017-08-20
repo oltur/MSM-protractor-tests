@@ -38,78 +38,63 @@ describe('MSMS site tests', function () {
 
   it('should open a main page', () => {
 
-    browser.driver.findElement(by.id('iframeForm')).then(elem => {
+    let pSwitchToForm = browser.driver.findElement(by.id('iframeForm')).then(elem => {
       console.log('Found iframeForm: ' + elem);
-      browser.driver.switchTo().frame(elem).then(() => {
-        console.log("Switched to iframeForm");
+      return browser.driver.switchTo().frame(elem)
+    });
 
-        browser.driver.findElement(by.id('Email')).then((elem) => {
-          elem.sendKeys('alex.turevski@mysupermarket.com');
-          console.log("Filling username");
-          browser.driver.findElement(by.id('PasswordLogin')).then((elem) => {
-            elem.sendKeys('manisfree');
-            console.log("Filling password");
-            browser.driver.findElement(by.id('SignInButton')).then((elem) => {
-              elem.click();
-              console.log("Clicking SignInButton");
 
-              var elContinueButton;
-              browser.driver.findElement(by.id('ContinueButton')).then(e => {
-                elContinueButton = e;
-                return browser.driver.wait(until.elementIsVisible(e))
-              }, t).then((elem) => {
-                elem.click();
-                console.log("Clicking ContinueButton");
+    let pLogin = pSwitchToForm.then(() => {
+      console.log("Switched to iframeForm");
 
-                browser.driver.switchTo().defaultContent().then(() => {
-                  console.log("Switched to default");
-
-                  browser.driver.sleep(3000);
-
-                  browser.driver.findElement(by.className('StartShoppingBtn')).then((elem) => {
-                    elem.click();
-                    console.log("Clicking StartShoppingBtn");
-
-                    var elListTitle;
-                    browser.driver.findElement(by.id('ListTitle'))
-                      .then(e => {
-                        elListTitle = e;
-                        return browser.driver.wait(until.elementIsVisible(e))
-                      }, t)
-                      .then(() => {
-                        console.log("Finding ListTitle");
-                        expect(elListTitle.getText()).toContain(' Top Offers');
-                      });
-                  });
-                });
-              });
-            });
+      return browser.driver.findElement(by.id('Email')).then((elem) => {
+        elem.sendKeys('alex.turevski@mysupermarket.com');
+        console.log("Filling username");
+        return browser.driver.findElement(by.id('PasswordLogin')).then((elem) => {
+          elem.sendKeys('manisfree');
+          console.log("Filling password");
+          return browser.driver.findElement(by.id('SignInButton')).then((elem) => {
+            elem.click();
+            console.log("Clicking SignInButton");
           });
         });
       });
     });
+
+    let pContinueButton = pLogin.then(() =>
+      browser.driver.findElement(by.id('ContinueButton')).then(e => {
+        var elContinueButton = e;
+        var t = until.elementIsVisible(e);
+        console.log("until.elementIsVisible:" + t);
+        return browser.driver.wait(t);
+      }, t).then(elem => {
+        elem.click();
+        console.log("Clicking ContinueButton");
+
+        return browser.driver.switchTo().defaultContent().then(() => {
+          console.log("Switched to default");
+
+          browser.driver.sleep(3000);
+
+          return Promise.resolve(null);
+        });
+      }));
+
+    var pStartShoppingBtn = browser.driver.findElement(by.className('StartShoppingBtn')).then((elem) => {
+      elem.click();
+      console.log("Clicking StartShoppingBtn");
+
+      var elListTitle;
+      return browser.driver.findElement(by.id('ListTitle'))
+        .then(e => {
+          elListTitle = e;
+          return browser.driver.wait(until.elementIsVisible(e))
+        }, t)
+        .then(() => {
+          console.log("Finding ListTitle");
+          return expect(elListTitle.getText()).toContain(' Top Offers');
+        });
+    });
   });
-
-
-  // it('should have a history', function () {
-  //   for(const t in Array.from(Array(5).keys())) {
-  //     add(t, parseInt(t)+1);
-  //   }
-
-  //   expect(history.count()).toEqual(5);
-
-  //   expect(history.last().getText()).toContain('0 + 1');
-  // });
-
-  // it('should show an alert', () => {
-  //   browser.executeScript('alert("alert")');
-  //   var EC = protractor.ExpectedConditions;
-  //   // Waits for an alert pops up.
-  //   browser.driver.wait(EC.alertIsPresent(), 5000);
-
-  //   var alertDialog = browser.switchTo().alert();
-
-  //   expect(alertDialog.getText()).toEqual("alert");
-  // });
 
 });
