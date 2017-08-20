@@ -1,8 +1,9 @@
 // spec.js
 describe('MSMS site tests', function () {
 
-  var t = 5000;
-  var d;
+  var until = require('selenium-webdriver').until;
+
+  var t = 60000;
 
   // var firstNumber = element(by.model('first'));
   // var secondNumber = element(by.model('second'));
@@ -25,49 +26,47 @@ describe('MSMS site tests', function () {
   //  }, timeout_interval);
 
   beforeEach(function () {
-    d = browser.driver;
-    d.ignoreSynchronization = true;
-    d.get('https://www.mysupermarket.co.uk/');
+    browser.driver.ignoreSynchronization = true;
+    browser.driver.get('https://www.mysupermarket.co.uk/?LandingScript=click::{%22ID%22:%22SignIn%22}');
   });
-
 
   // it('should have a title', () => {
 
-  //   expect(d.getTitle()).toContain('mySupermarket');
+  //   expect(browser.driver.getTitle()).toContain('mySupermarket');
   // });
 
   it('should open a main page', () => {
 
-    d.findElement(By.className('StartShoppingBtn')).then(elem => {
-      elem.click();
-      console.log('0');
-      return true;
-    });
+    browser.driver.findElement(by.id('iframeForm')).then(elem => {
+      console.log('Found iframeForm: ' + elem);
+      browser.driver.switchTo().frame(elem).then(() => {
+        console.log("Switched to iframeForm");
 
-    d.findElement(By.id('iframeForm')).then((elem) => {
-      d.switchTo().frame("iframeForm");
-      console.log('1');
-      return true;
-    });
+        browser.driver.findElement(by.id('Email')).sendKeys('alex.turevski@mysupermarket.com').then((elem) => {
+          console.log("Filling username");
+          browser.driver.findElement(by.id('PasswordLogin')).sendKeys('manisfree').then((elem) => {
+            console.log("Filling password");
+            browser.driver.findElement(by.id('SignInButton')).click().then((elem) => {
+              console.log("Clicking SignInButton");
 
+              browser.driver.findElement(by.id('ContinueButton')).click().then((elem) => {
+                console.log("Clicking ContinueButton");
 
-    d.wait(() => {
-      console.log('2b');
-      d.findElement(By.className('ui-dialog-titlebar-close')).then((elem) => {
-        console.log('2a');
-        elem.click();
-        d.switchTo().defaultContent();
-        console.log('2');
-        return true;
+                browser.driver.switchTo().defaultContent().then(() => {
+                  console.log("Switched to default");
+                  browser.driver.findElement(by.id('ListTitle')).then((elem) => {
+                    console.log("Finding ListTitle");
+                    expect(elem.getText()).toEqual('my Top Offers');
+                  });
+                });
+              });
+            });
+          });
+        });
       });
-    }, 60000);
-
-    d.findElement(By.id('ListTitle')).then((elem) => {
-      expect(elem.getText()).toEqual('my Top Offers');
-      return true;
     });
-
   });
+
 
   // it('should have a history', function () {
   //   for(const t in Array.from(Array(5).keys())) {
