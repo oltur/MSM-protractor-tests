@@ -2,6 +2,7 @@
 describe('MSMS site tests', function () {
 
   var until = require('selenium-webdriver').until;
+  var EC = protractor.ExpectedConditions;
 
   var t = 60000;
 
@@ -42,21 +43,43 @@ describe('MSMS site tests', function () {
       browser.driver.switchTo().frame(elem).then(() => {
         console.log("Switched to iframeForm");
 
-        browser.driver.findElement(by.id('Email')).sendKeys('alex.turevski@mysupermarket.com').then((elem) => {
+        browser.driver.findElement(by.id('Email')).then((elem) => {
+          elem.sendKeys('alex.turevski@mysupermarket.com');
           console.log("Filling username");
-          browser.driver.findElement(by.id('PasswordLogin')).sendKeys('manisfree').then((elem) => {
+          browser.driver.findElement(by.id('PasswordLogin')).then((elem) => {
+            elem.sendKeys('manisfree');
             console.log("Filling password");
-            browser.driver.findElement(by.id('SignInButton')).click().then((elem) => {
+            browser.driver.findElement(by.id('SignInButton')).then((elem) => {
+              elem.click();
               console.log("Clicking SignInButton");
 
-              browser.driver.findElement(by.id('ContinueButton')).click().then((elem) => {
+              var elContinueButton;
+              browser.driver.findElement(by.id('ContinueButton')).then(e => {
+                elContinueButton = e;
+                return browser.driver.wait(until.elementIsVisible(e))
+              }, t).then((elem) => {
+                elem.click();
                 console.log("Clicking ContinueButton");
 
                 browser.driver.switchTo().defaultContent().then(() => {
                   console.log("Switched to default");
-                  browser.driver.findElement(by.id('ListTitle')).then((elem) => {
-                    console.log("Finding ListTitle");
-                    expect(elem.getText()).toEqual('my Top Offers');
+
+                  browser.driver.sleep(3000);
+
+                  browser.driver.findElement(by.className('StartShoppingBtn')).then((elem) => {
+                    elem.click();
+                    console.log("Clicking StartShoppingBtn");
+
+                    var elListTitle;
+                    browser.driver.findElement(by.id('ListTitle'))
+                      .then(e => {
+                        elListTitle = e;
+                        return browser.driver.wait(until.elementIsVisible(e))
+                      }, t)
+                      .then(() => {
+                        console.log("Finding ListTitle");
+                        expect(elListTitle.getText()).toContain(' Top Offers');
+                      });
                   });
                 });
               });
