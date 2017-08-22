@@ -27,4 +27,4 @@ class Out {
 
 }
 
-exports.instance = new Out();
+exports.getInstance = () => new Out();

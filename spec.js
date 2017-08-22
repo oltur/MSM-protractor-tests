@@ -1,12 +1,12 @@
 var testData = require('./json/test-data.json');
-var out = require('./tools/out.js').instance;
-var helpers = require('./tools/helpers.js').instance;
+var out = require('./tools/out.js').getInstance();
 var until = require('selenium-webdriver').until;
 
 describe('MSM site tests', function () {
 
   var d = browser.driver;
-
+  var helpers = require('./tools/helpers.js').getInstance(d, out);
+  
   var currentSpec;
 
   beforeEach(() => {
@@ -27,7 +27,7 @@ describe('MSM site tests', function () {
 
   currentSpec = it('should open a main page', (done) => {
     out.log(`Test: ${currentSpec.description}`);
-    helpers.login(d).then(() => done());
+    helpers.login().then(() => done());
   });
 
 });
