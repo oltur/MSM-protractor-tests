@@ -1,0 +1,8 @@
+{
+    "accessData": {
+        "userName": "alex.turevski@mysupermarket.com",
+        "password": "manisfree"
+    },
+    "startPage": "https://www.mysupermarket.co.uk/?LandingScript=click::{%22ID%22:%22SignIn%22}",
+    "timeout": 60000
+}
