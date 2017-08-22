@@ -18,5 +18,8 @@
   "homepage": "https://github.com/oltur/protractor-sample#readme",
   "dependencies": {
     "protractor": "^5.1.2"
+  },
+  "devDependencies": {
+    "mssql": "^4.0.4"
   }
 }

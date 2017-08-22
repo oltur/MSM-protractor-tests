@@ -1,6 +1,7 @@
 var testData = require('./json/test-data.json');
 var out = require('./tools/out.js').getInstance();
 var until = require('selenium-webdriver').until;
+var db = require('./tools/db.js').getInstance();
 
 describe('MSM site tests', function () {
 
@@ -19,21 +20,29 @@ describe('MSM site tests', function () {
     out.groupEnd();
   });
 
-  currentSpec = it('should have a title', (done) => {
+  currentSpec = it('should get a FreedomSite Db version', (done) => {
     out.log(`Test name: ${currentSpec.description}`);
-    out.log("Verifying title");
-    expect(d.getTitle()).toContain('mySupermarket');
-    done()
+    db.getData().then(data => {
+      out.log("The data is: " + data);
+      done()
+    });
   });
 
-  currentSpec = it('should open a main page', (done) => {
-    out.log(`Test name: ${currentSpec.description}`);
-    helpers.login()
-      .then(() => {
-        out.log("Verifying ListTitle");
-        return helpers.findAndExpectTextContain(by.id('ListTitle'), ' Top Offers')
-      })
-      .then(() => done());
-  });
+  // currentSpec = it('should have a title', (done) => {
+  //   out.log(`Test name: ${currentSpec.description}`);
+  //   out.log("Verifying title");
+  //   expect(d.getTitle()).toContain('mySupermarket');
+  //   done()
+  // });
+
+  // currentSpec = it('should open a main page', (done) => {
+  //   out.log(`Test name: ${currentSpec.description}`);
+  //   helpers.login()
+  //     .then(() => {
+  //       out.log("Verifying ListTitle");
+  //       return helpers.findAndExpectTextContain(by.id('ListTitle'), ' Top Offers')
+  //     })
+  //     .then(() => done());
+  // });
 
 });
