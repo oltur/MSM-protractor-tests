@@ -20,14 +20,14 @@ describe('MSM site tests', function () {
   });
 
   currentSpec = it('should have a title', (done) => {
-    out.log(`Test: ${currentSpec.description}`);
+    out.log(`Test name: ${currentSpec.description}`);
     out.log("Verifying title");
     expect(d.getTitle()).toContain('mySupermarket');
     done()
   });
 
   currentSpec = it('should open a main page', (done) => {
-    out.log(`Test: ${currentSpec.description}`);
+    out.log(`Test name: ${currentSpec.description}`);
     helpers.login()
       .then(() => {
         out.log("Verifying ListTitle");
