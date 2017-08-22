@@ -20,7 +20,8 @@ describe('MSM site tests', function () {
   });
 
   currentSpec = it('should have a title', (done) => {
-    out.log(`Test: 'should have a title'`);
+    out.log(`Test: ${currentSpec.description}`);
+    out.log("Verifying title");
     expect(d.getTitle()).toContain('mySupermarket');
     done()
   });
