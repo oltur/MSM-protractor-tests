@@ -1,6 +1,6 @@
+testData = require('../json/test-data.json');
 out = require('./out.js').instance;
 until = require('selenium-webdriver').until;
-testData = require('../json/test-data.json');
 
 class Helpers {
 
@@ -8,65 +8,63 @@ class Helpers {
     }
 
     login(d) {
-        let pSwitchToForm = d.findElement(by.id('iframeForm')).then(elem => {
-            out.log('Found iframeForm: ' + elem);
-            return d.switchTo().frame(elem)
-        });
-
-
-        let pLogin = pSwitchToForm.then(() => {
-            out.log("Switched to iframeForm");
-
-            return d.findElement(by.id('Email')).then((elem) => {
-                elem.sendKeys(testData.accessData.userName);
-                out.log("Filling username");
-                return d.findElement(by.id('PasswordLogin')).then((elem) => {
-                    elem.sendKeys(testData.accessData.password);
-                    out.log("Filling password");
-                    return d.findElement(by.id('SignInButton')).then((elem) => {
-                        elem.click();
-                        out.log("Clicking SignInButton");
-                    });
-                });
-            });
-        });
-
-        let pContinueButton = pLogin.then(() =>
-            d.findElement(by.id('ContinueButton')).then(e => {
-                var elContinueButton = e;
-                return d.wait(until.elementIsVisible(e));
-            }, testData.timeout).then(elem => {
-                elem.click();
-                out.log("Clicking ContinueButton");
-
-                return d.switchTo().defaultContent().then(() => {
-                    out.log("Switched to default");
-
-                    d.sleep(3000);
-
-                    return Promise.resolve(null);
-                });
-            }));
-
-        var pStartShoppingBtn = d.findElement(by.className('StartShoppingBtn')).then((elem) => {
-            elem.click();
-            out.log("Clicking StartShoppingBtn");
-
-            var elListTitle;
-            return d.findElement(by.id('ListTitle'))
-                .then(e => {
-                    elListTitle = e;
-                    return d.wait(until.elementIsVisible(e))
-                }, testData.timeout)
+        var result =
+            d.findElement(by.id('iframeForm'))
+                .then(elem => {
+                    out.log('Found iframeForm: ' + elem);
+                    return d.switchTo().frame(elem)
+                })
                 .then(() => {
+                    out.log("Switching to iframeForm");
+                    return d.findElement(by.id('Email'))
+                })
+                .then((elem) => {
+                    out.log("Filling username");
+                    elem.sendKeys(testData.accessData.userName);
+                    return d.findElement(by.id('PasswordLogin'))
+                }).then((elem) => {
+                    out.log("Filling password");
+                    elem.sendKeys(testData.accessData.password);
+                    return d.findElement(by.id('SignInButton'))
+                })
+                .then((elem) => {
+                    out.log("Clicking SignInButton");
+                    return elem.click();
+                })
+                .then(() => {
+                    out.log("Finding ContinueButton");
+                    return d.findElement(by.id('ContinueButton'));
+                })
+                .then(elem => {
+                    out.log("Waiting for ContinueButton visibility");
+                    return d.wait(until.elementIsVisible(elem)).then(() => Promise.resolve(elem));
+                })
+                .then(elem => {
+                    out.log("Clicking ContinueButton");
+                    return elem.click();
+                })
+                .then(() => {
+                    return d.switchTo().defaultContent();
+                })
+                .then(() => {
+                    out.log("Switching to default");
+                    d.sleep(5000);
+                    return d.findElement(by.className('StartShoppingBtn'));
+                })
+                .then((elem) => {
+                    elem.click();
+                    out.log("Clicking StartShoppingBtn");
+                    return d.findElement(by.id('ListTitle'))
+                })
+                .then(elem => {
+                    return d.wait(until.elementIsVisible(elem)).then(() => Promise.resolve(elem));
+                })
+                .then(elem => {
                     out.log("Finding ListTitle");
-                    return expect(elListTitle.getText()).toContain(' Top Offers');
+                    return expect(elem.getText()).toContain(' Top Offers');
                 });
-        });
-
-        return pStartShoppingBtn;
+        return result;
     }
-
 }
 
 exports.instance = new Helpers();

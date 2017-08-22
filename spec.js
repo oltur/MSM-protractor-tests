@@ -1,20 +1,16 @@
 var testData = require('./json/test-data.json');
-
 var out = require('./tools/out.js').instance;
 var helpers = require('./tools/helpers.js').instance;
-
 var until = require('selenium-webdriver').until;
 
-describe('MSMS site tests', function () {
+describe('MSM site tests', function () {
 
   var d = browser.driver;
 
-  var it2 = function (name, test, text) {
-    out.group(`Test: '${name}'`);
-    it(name, test, text);
-  }
+  var currentSpec;
 
   beforeEach(() => {
+    out.group();
     d.ignoreSynchronization = true;
     d.get(testData.startPage);
   });
@@ -23,13 +19,15 @@ describe('MSMS site tests', function () {
     out.groupEnd();
   });
 
-  it2('should have a title', () => {
-    expect(d.getTitle()).toContain('mySupermarket');
-    return Promise.resolve();
-  });
+  // currentSpec = it('should have a title', (done) => {
+  //   out.log(`Test: 'should have a title'`);
+  //   expect(d.getTitle()).toContain('mySupermarket');
+  //   done()
+  // });
 
-  it2('should open a main page', () => {
-    return helpers.login(d);
+  currentSpec = it('should open a main page', (done) => {
+    out.log(`Test: ${currentSpec.description}`);
+    helpers.login(d).then(() => done());
   });
 
 });

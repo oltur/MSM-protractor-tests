@@ -7,7 +7,7 @@ class Out {
 
     log() {
         let prefix = 
-            //Array(this.shift * 2).join(" ") + 
+            Array(this.shift * 2).join(" ") + 
         new Date().toISOString();
         Array.prototype.unshift.call(arguments, prefix);
         console.log.apply(this, arguments);
@@ -15,13 +15,13 @@ class Out {
 
     group(name) {
         this.lastGroup = name || "";
-        this.log(`Entering '${this.lastGroup}'`);
+        this.log(`Entering group ${this.lastGroup}`);
         this.shift++;
     }
 
     groupEnd() {
         this.shift--;
-        this.log(`Exiting '${this.lastGroup}`);
+        this.log(`Exiting group`);
         this.lastGroup = "";
     }
 
