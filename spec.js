@@ -6,7 +6,7 @@ describe('MSM site tests', function () {
 
   var d = browser.driver;
   var helpers = require('./tools/helpers.js').getInstance(d, out);
-  
+
   var currentSpec;
 
   beforeEach(() => {
@@ -19,15 +19,20 @@ describe('MSM site tests', function () {
     out.groupEnd();
   });
 
-  // currentSpec = it('should have a title', (done) => {
-  //   out.log(`Test: 'should have a title'`);
-  //   expect(d.getTitle()).toContain('mySupermarket');
-  //   done()
-  // });
+  currentSpec = it('should have a title', (done) => {
+    out.log(`Test: 'should have a title'`);
+    expect(d.getTitle()).toContain('mySupermarket');
+    done()
+  });
 
   currentSpec = it('should open a main page', (done) => {
     out.log(`Test: ${currentSpec.description}`);
-    helpers.login().then(() => done());
+    helpers.login()
+      .then(() => {
+        this.out.log("Verifying ListTitle");
+        return helpers.findAndExpectTextContain(by.id('ListTitle'), ' Top Offers')
+      })
+      .then(() => done());
   });
 
 });

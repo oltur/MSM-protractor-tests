@@ -51,7 +51,7 @@ class Helpers {
                     return this.findAndClick(by.id('ContinueButton'));
                 })
                 .then((elem) => {
-                    this.out.log("Switching to default");
+                    this.out.log("Switching to default context");
                     return this.d.switchTo().defaultContent();
                 })
                 .then(() => {
@@ -59,10 +59,6 @@ class Helpers {
                     this.out.log("Clicking StartShoppingBtn");
                     return this.findAndClick(by.className('StartShoppingBtn'));
                 })
-                .then(() => {
-                    this.out.log("Finding ListTitle");
-                    return this.findAndExpectTextContain(by.id('ListTitle'), ' Top Offers')
-                });
         return result;
     }
 }
