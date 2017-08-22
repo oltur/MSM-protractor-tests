@@ -44,16 +44,17 @@ class Helpers {
                     return elem.click();
                 })
                 .then(() => {
+                    out.log("Switching to default");
                     return d.switchTo().defaultContent();
                 })
                 .then(() => {
-                    out.log("Switching to default");
                     d.sleep(5000);
+                    out.log("Finding StartShoppingBtn");
                     return d.findElement(by.className('StartShoppingBtn'));
                 })
                 .then((elem) => {
-                    elem.click();
                     out.log("Clicking StartShoppingBtn");
+                    elem.click();
                     return d.findElement(by.id('ListTitle'))
                 })
                 .then(elem => {
