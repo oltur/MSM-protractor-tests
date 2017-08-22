@@ -29,7 +29,7 @@ describe('MSM site tests', function () {
     out.log(`Test: ${currentSpec.description}`);
     helpers.login()
       .then(() => {
-        this.out.log("Verifying ListTitle");
+        out.log("Verifying ListTitle");
         return helpers.findAndExpectTextContain(by.id('ListTitle'), ' Top Offers')
       })
       .then(() => done());
