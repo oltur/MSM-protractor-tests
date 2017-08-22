@@ -21,7 +21,7 @@ describe('MSM site tests', function () {
   });
 
   currentSpec = it('should get a FreedomSite Db version', (done) => {
-    out.log(`Test name: ${currentSpec.description}`);
+    out.log(`Test name: 'should get a FreedomSite Db version'`);
     db.getData().then(data => {
       out.log("The data is: " + data);
       done()
@@ -29,14 +29,14 @@ describe('MSM site tests', function () {
   });
 
   currentSpec = it('should have a title', (done) => {
-    out.log(`Test name: ${currentSpec.description}`);
+    out.log(`Test name: 'should have a title'`);
     out.log("Verifying title");
     expect(d.getTitle()).toContain('mySupermarket');
     done()
   });
 
   currentSpec = it('should open a main page', (done) => {
-    out.log(`Test name: ${currentSpec.description}`);
+    out.log(`Test name: 'should open a main page'`);
     helpers.login()
       .then(() => {
         out.log("Verifying ListTitle");
