@@ -14,7 +14,7 @@ class Db {
                 //.input('input_parameter', sql.Int, value)
                 .query("select * from DpnDatabaseProperties where Name ='Database Version'")
         }).then(result => {
-            return Promise.resolve(JSON.stringify(result));
+            return Promise.resolve(JSON.stringify(result.recordset[0][0].Value));
         });
 
     }
