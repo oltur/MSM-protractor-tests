@@ -4,11 +4,12 @@ var until = require('selenium-webdriver').until;
 var db = require('./tools/db.js').getInstance();
 var loginModel = require('./models/login-model.js').getInstance();
 var mainPageModel = require('./models/main-page-model.js').getInstance();
-var h = require('./tools/helpers.js').getInstance(d, out);
 
 describe('MSM site tests', function () {
 
   var d = browser.driver;
+  var h = require('./tools/helpers.js').getInstance(d, out);
+
   var currentSpec;
 
   beforeEach(() => {
