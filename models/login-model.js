@@ -1,11 +1,12 @@
 class LoginModel {
     constructor() {
-        this.iframeForm = "iframeForm";
-        this.Email = "Email";
-        this.PasswordLogin = "PasswordLogin";
-        this.SignInButton = "SignInButton";
-        this.ContinueButton = "ContinueButton";
-        this.StartShoppingBtn = "StartShoppingBtn";
     }
+
+    get iframeForm() { return "iframeForm" };
+    get Email() { return "Email" };
+    get PasswordLogin() { return "PasswordLogin" };
+    get SignInButton() { return "SignInButton" };
+    get ContinueButton() { return "ContinueButton" };
+    get StartShoppingBtn() { return "StartShoppingBtn" };
 }
 exports.getInstance = () => new LoginModel();

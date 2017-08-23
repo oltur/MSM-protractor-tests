@@ -1,6 +1,7 @@
 class MainPageModel {
     constructor() {
-        this.ListTitle = "ListTitle";
     }
+
+    get ListTitle() {return "ListTitle"};
 }
 exports.getInstance = () => new MainPageModel();
