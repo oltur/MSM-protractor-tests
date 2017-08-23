@@ -2,12 +2,13 @@ var testData = require('./json/test-data.json');
 var out = require('./tools/out.js').getInstance();
 var until = require('selenium-webdriver').until;
 var db = require('./tools/db.js').getInstance();
+var loginModel = require('./models/login-model.js').getInstance();
+var mainPageModel = require('./models/main-page-model.js').getInstance();
+var h = require('./tools/helpers.js').getInstance(d, out);
 
 describe('MSM site tests', function () {
 
   var d = browser.driver;
-  var helpers = require('./tools/helpers.js').getInstance(d, out);
-
   var currentSpec;
 
   beforeEach(() => {
@@ -20,29 +21,29 @@ describe('MSM site tests', function () {
     out.groupEnd();
   });
 
-  currentSpec = it('should get a FreedomSite Db version', (done) => {
-    out.log(`Test name: 'should get a FreedomSite Db version'`);
+  currentSpec = it('should get a FreedomSite Db version', h.getHandler(currentSpec, (done) => {
+    out.log(`Test name: '${currentSpec.description}'`);
     db.getData().then(data => {
       out.log("The data is: " + data);
       done()
     });
-  });
+  }));
 
-  currentSpec = it('should have a title', (done) => {
-    out.log(`Test name: 'should have a title'`);
+  currentSpec = it('should have a title', h.getHandler(currentSpec, (done) => {
+    out.log(`Test name: '${currentSpec.description}'`);
     out.log("Verifying title");
     expect(d.getTitle()).toContain('mySupermarket');
     done()
-  });
+  }));
 
-  currentSpec = it('should open a main page', (done) => {
-    out.log(`Test name: 'should open a main page'`);
-    helpers.login()
+  currentSpec = it('should open a main page', h.getHandler(currentSpec, (done) => {
+    out.log(`Test name: '${currentSpec.description}'`);
+    h.login()
       .then(() => {
         out.log("Verifying ListTitle");
-        return helpers.findAndExpectTextContain(by.id('ListTitle'), ' Top Offers')
+        return h.findAndExpectTextContain(by.id(mainPageModel.ListTitle), ' Top Offers')
       })
       .then(() => done());
-  });
+  }));
 
 });

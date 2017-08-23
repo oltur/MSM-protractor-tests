@@ -1,11 +1,16 @@
-testData = require('../json/test-data.json');
-until = require('selenium-webdriver').until;
+var testData = require('../json/test-data.json');
+var until = require('selenium-webdriver').until;
+var loginModel = require('../models/login-model.js').getInstance();
 
 class Helpers {
 
     constructor(d, out) {
         this.d = d;
         this.out = out;
+    }
+
+    getHandler(currentSpec, handler) {
+        return handler;
     }
 
     findAndClick(by) {
@@ -29,26 +34,26 @@ class Helpers {
     login() {
         this.out.log('Finding iframeForm');
         var result =
-            this.d.findElement(by.id('iframeForm'))
+            this.d.findElement(by.id(loginModel.iframeForm))
                 .then(elem => {
                     this.out.log('Switching to iframeForm');
                     return this.d.switchTo().frame(elem)
                 })
                 .then(() => {
                     this.out.log("Filling Email");
-                    return this.findAndSendKeys(by.id('Email'), testData.accessData.userName)
+                    return this.findAndSendKeys(by.id(loginModel.Email), testData.accessData.userName)
                 })
                 .then((elem) => {
                     this.out.log("Filling PasswordLogin");
-                    return this.findAndSendKeys(by.id('PasswordLogin'), testData.accessData.password);
+                    return this.findAndSendKeys(by.id(loginModel.PasswordLogin), testData.accessData.password);
                 })
                 .then((elem) => {
                     this.out.log("Clicking SignInButton");
-                    return this.findAndClick(by.id('SignInButton'))
+                    return this.findAndClick(by.id(loginModel.SignInButton))
                 })
                 .then((elem) => {
                     this.out.log("Clicking ContinueButton");
-                    return this.findAndClick(by.id('ContinueButton'));
+                    return this.findAndClick(by.id(loginModel.ContinueButton));
                 })
                 .then((elem) => {
                     this.out.log("Switching to default context");
@@ -57,7 +62,7 @@ class Helpers {
                 .then(() => {
                     this.d.sleep(5000);
                     this.out.log("Clicking StartShoppingBtn");
-                    return this.findAndClick(by.className('StartShoppingBtn'));
+                    return this.findAndClick(by.className(loginModel.StartShoppingBtn));
                 })
         return result;
     }
