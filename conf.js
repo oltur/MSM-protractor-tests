@@ -8,7 +8,10 @@ exports.config = {
     //   browserName: 'firefox'
     // },
     {
-      browserName: 'chrome'
+      browserName: 'chrome',
+     chromeOptions: {
+      args: ['show-fps-counter=true']
+      }
     }
   ],
   jasmineNodeOpts: {

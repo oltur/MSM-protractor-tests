@@ -1,1 +1,1 @@
-node .\node_modules\protractor\bin\protractor --version
+node .\node_modules\protractor\bin\protractor conf.js
