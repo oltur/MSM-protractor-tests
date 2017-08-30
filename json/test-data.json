@@ -3,6 +3,9 @@
         "userName": "alex.turevski@mysupermarket.com",
         "password": "manisfree"
     },
+    "db": {
+        "csFreedomSite" : "mssql://sa:sa@localhost/FreedomSite"
+    },
     "baseUrl": "https://www.mysupermarket.co.uk",
     "startPage": "/?LandingScript=click::{%22ID%22:%22SignIn%22}",
     "timeout": 60000

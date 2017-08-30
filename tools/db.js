@@ -6,16 +6,18 @@ class Db {
     constructor() {
     }
 
-    getData() {
+    getData(cs = testData.db.csFreedomSite, query = "select * from DpnDatabaseProperties where Name ='Database Version'", parameters = []) {
 
-        return sql.connect('mssql://sa:sa@localhost/FreedomSite')
-        .then(pool => {
-            return pool.request()
-                //.input('input_parameter', sql.Int, value)
-                .query("select * from DpnDatabaseProperties where Name ='Database Version'")
-        }).then(result => {
-            return Promise.resolve(JSON.stringify(result.recordset[0].Value));
-        });
+        return sql.connect(cs)
+            .then(pool => {
+                let request = pool.request();
+                parameters.forEach(parameter => {
+                    request.input(parameter.name, parameter.type/*sql.Int*/, parameter.value)
+                })
+                return request.query(query);
+            }).then(result => {
+                return Promise.resolve(result.recordsets);
+            });
 
     }
 }
