@@ -44,7 +44,7 @@ describe('MSM site composite products test', function () {
 
   currentSpec = it('should add composite to basket correctly', h.getHandler(currentSpec, (done) => {
     o.log(`Test name: '${currentSpec.description}'`);
-    
+
     o.log(`Reading test data from DB`);
     db.getData(testData.db.csFreedomSite, 'select TOP 1 CompositeProductID, Name from DpnCompositeProduct order by CompositeProductID asc')
       .then(recordsets => {
@@ -55,6 +55,50 @@ describe('MSM site composite products test', function () {
         // c.compositeText = 'Test Bundle with 2 items of different quantity';
 
         return Promise.all([h.checkStartPage(), h2.checkStartPage()]);
+      })
+      .then(() => {
+        o.log("In the beginning opening Product Page to hunt for composite parts");
+        return d.get(h.getAbsoluteUrl(`/product/${c.compositeId}`))
+      })
+      .then(() => {
+        o.log("Getting all product parts' cells");
+        return d.findElements(by.css('.NgMspProductCell'));
+      })
+      .then((elems) => {
+        o.log("Getting their productid attributes");
+        c.partElements = elems;
+
+        const promises = c.partElements.map(x => x.getAttribute("productid"));
+
+        return Promise.all(promises);
+      })
+      .then(values => {
+        o.log("Getting the values");
+
+        const ids = values.map(x => parseInt(x));
+        //const quantities = elems.map(x => parseInt(x.getAttribute("productid")));
+
+        c.compositePartIds = ids;//[3738, 8794];
+        //c.compositePartQuantities = { [3738]: 1, [8794]: 2 };
+
+      })
+      .then(() => {
+        o.log("Getting all product parts' quantity labels");
+        let promises = c.partElements.map(x => h2.findAndGetText(by.css('.LabelText'), x));
+        return Promise.all(promises);
+      })
+      .then(values => {
+        o.log("Getting the values");
+
+        const quantities = values.map(x => parseInt(x.substring(1)));
+
+        let result = {};
+        for (let i = 0; i < quantities.length; i++) {
+          result[c.compositePartIds[i]] = quantities[i];
+        }
+
+        c.compositePartQuantities = result;
+        delete c.partElements;
       })
       .then(() => {
         o.log("Opening My Top Offers");
@@ -78,9 +122,6 @@ describe('MSM site composite products test', function () {
         c.quantity = parseInt(quantity);
       })
       .then(() => {
-        // TODO: Change to autodiscovery on page
-        c.compositePartIds = [3738, 8794];
-        c.compositePartQuantities = { [3738]: 1, [8794]: 2 };
         return h2.getProductsDataFromBasket(c.compositePartIds);
       })
       .then(basketQuantities => {
