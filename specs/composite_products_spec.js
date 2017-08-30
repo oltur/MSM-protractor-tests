@@ -43,7 +43,9 @@ describe('MSM site composite products test', function () {
   });
 
   currentSpec = it('should add composite to basket correctly', h.getHandler(currentSpec, (done) => {
-
+    o.log(`Test name: '${currentSpec.description}'`);
+    
+    o.log(`Reading test datya from DB`);
     db.getData(testData.db.csFreedomSite, 'select TOP 1 CompositeProductID, Name from DpnCompositeProduct order by CompositeProductID asc')
       .then(recordsets => {
         c.compositeId = recordsets[0][0]["CompositeProductID"];
@@ -52,7 +54,6 @@ describe('MSM site composite products test', function () {
         // c.compositeId = 12000000;
         // c.compositeText = 'Test Bundle with 2 items of different quantity';
 
-        o.log(`Test name: '${currentSpec.description}'`);
         return Promise.all([h.checkStartPage(), h2.checkStartPage()]);
       })
       .then(() => {
