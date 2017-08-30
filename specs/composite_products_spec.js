@@ -53,79 +53,79 @@ describe('MSM site composite products test', function () {
         // c.compositeText = 'Test Bundle with 2 items of different quantity';
 
         o.log(`Test name: '${currentSpec.description}'`);
-        Promise.all([h.checkStartPage(), h2.checkStartPage()])
-          .then(() => {
-            o.log("Opening My Top Offers");
-            return d.get(h.getAbsoluteUrl('/shelf/PersonalOffers_my_top_offers'))
-          })
-          .then(() => {
-            o.log(`Finding composite #${c.compositeId}`);
-            return h.findAndWaitForVisible(by.xpath('//li[@productid="' + c.compositeId + '"]'))
-          })
-          .then(productCell => {
-            c.productCell = productCell;
-            o.log(`Checking if composite has correct text of '${c.compositeText}'`);
-            return h.findAndWaitForVisible(by.xpath('//b[text()="' + c.compositeText + '"]'), c.productCell);
-          })
-          .then(() => {
-            o.log("Finding composite Quantity element and getting its text");
-            return h.findAndGetText(by.xpath('//span[@class="Quantity"]'), c.productCell)
-          })
-          .then(quantity => {
-            o.log(`Saving composite quantity of ${quantity}`);
-            c.quantity = parseInt(quantity);
-          })
-          .then(() => {
-            // TODO: Change to autodiscovery on page
-            c.compositePartIds = [3738, 8794];
-            c.compositePartQuantities = { [3738]: 1, [8794]: 2 };
-            return h2.getProductsDataFromBasket(c.compositePartIds);
-          })
-          .then(basketQuantities => {
-            o.log(`Saving products quantities of composite parts ${JSON.stringify(basketQuantities)}`);
-            c.basketQuantities = basketQuantities;
-          })
-          .then(() => {
-            o.log("Adding one more item of composite product to basket");
-            return h.findAndClick(by.css('.AddBtnWrp'), c.productCell);
-          })
-          .then(() => {
-            o.log("Waiting a bit and Finding composite Quantity element and Getting its text again");
-            d.sleep(3000);
-            return h.findAndGetText(by.xpath('//span[@class="Quantity"]'), c.productCell)
-          })
-          .then(quantity => {
-            o.log(`Comparing new composite quantity and old composite quantity plus one (${quantity} vs. ${c.quantity + 1})`);
-            expect(parseInt(quantity)).toEqual(c.quantity + 1);
+        return Promise.all([h.checkStartPage(), h2.checkStartPage()]);
+      })
+      .then(() => {
+        o.log("Opening My Top Offers");
+        return d.get(h.getAbsoluteUrl('/shelf/PersonalOffers_my_top_offers'))
+      })
+      .then(() => {
+        o.log(`Finding composite #${c.compositeId}`);
+        return h.findAndWaitForVisible(by.xpath('//li[@productid="' + c.compositeId + '"]'))
+      })
+      .then(productCell => {
+        c.productCell = productCell;
+        o.log(`Checking if composite has correct text of '${c.compositeText}'`);
+        return h.findAndWaitForVisible(by.xpath('//b[text()="' + c.compositeText + '"]'), c.productCell);
+      })
+      .then(() => {
+        o.log("Finding composite Quantity element and getting its text");
+        return h.findAndGetText(by.xpath('//span[@class="Quantity"]'), c.productCell)
+      })
+      .then(quantity => {
+        o.log(`Saving composite quantity of ${quantity}`);
+        c.quantity = parseInt(quantity);
+      })
+      .then(() => {
+        // TODO: Change to autodiscovery on page
+        c.compositePartIds = [3738, 8794];
+        c.compositePartQuantities = { [3738]: 1, [8794]: 2 };
+        return h2.getProductsDataFromBasket(c.compositePartIds);
+      })
+      .then(basketQuantities => {
+        o.log(`Saving products quantities of composite parts ${JSON.stringify(basketQuantities)}`);
+        c.basketQuantities = basketQuantities;
+      })
+      .then(() => {
+        o.log("Adding one more item of composite product to basket");
+        return h.findAndClick(by.css('.AddBtnWrp'), c.productCell);
+      })
+      .then(() => {
+        o.log("Waiting a bit and Finding composite Quantity element and Getting its text again");
+        d.sleep(3000);
+        return h.findAndGetText(by.xpath('//span[@class="Quantity"]'), c.productCell)
+      })
+      .then(quantity => {
+        o.log(`Comparing new composite quantity and old composite quantity plus one (${quantity} vs. ${c.quantity + 1})`);
+        expect(parseInt(quantity)).toEqual(c.quantity + 1);
 
-            o.log(`Updating composite quantity of ${quantity}`);
-            c.quantity = parseInt(quantity);
+        o.log(`Updating composite quantity of ${quantity}`);
+        c.quantity = parseInt(quantity);
 
-            return Promise.resolve(true);
-          })
-          .then(() => {
-            return h2.getProductsDataFromBasket(c.compositePartIds);
-          })
-          .then(quantities => {
-            c.compositePartIds.forEach(element => {
-              o.log(`Checking if #${element} quantity (${quantities[element]}) is old #${element} quantity plus ${c.compositePartQuantities[element]} (${parseInt(c.basketQuantities[element]) + c.compositePartQuantities[element]})`);
-              expect(parseInt(quantities[element])).toEqual(parseInt(c.basketQuantities[element]) + c.compositePartQuantities[element]);
-            })
-          })
-          .then(() => {
-            o.log("Removing one item of composite product from basket");
-            return h.findAndClick(by.css('.RemoveBtnWrp'), c.productCell);
-          })
-          .then(() => {
-            o.log("Waiting a bit and Finding composite Quantity element and Getting its text again");
-            d.sleep(3000);
-            return h.findAndGetText(by.xpath('//span[@class="Quantity"]'), c.productCell)
-          })
-          .then(quantity => {
-            o.log(`Comparing new composite quantity and old composite quantity minus one (${quantity} vs. ${c.quantity - 1})`);
-            expect(parseInt(quantity)).toEqual(c.quantity - 1);
-          })
-          .then(() => done());
-      });
+        return Promise.resolve(true);
+      })
+      .then(() => {
+        return h2.getProductsDataFromBasket(c.compositePartIds);
+      })
+      .then(quantities => {
+        c.compositePartIds.forEach(element => {
+          o.log(`Checking if #${element} quantity (${quantities[element]}) is old #${element} quantity plus ${c.compositePartQuantities[element]} (${parseInt(c.basketQuantities[element]) + c.compositePartQuantities[element]})`);
+          expect(parseInt(quantities[element])).toEqual(parseInt(c.basketQuantities[element]) + c.compositePartQuantities[element]);
+        })
+      })
+      .then(() => {
+        o.log("Removing one item of composite product from basket");
+        return h.findAndClick(by.css('.RemoveBtnWrp'), c.productCell);
+      })
+      .then(() => {
+        o.log("Waiting a bit and Finding composite Quantity element and Getting its text again");
+        d.sleep(3000);
+        return h.findAndGetText(by.xpath('//span[@class="Quantity"]'), c.productCell)
+      })
+      .then(quantity => {
+        o.log(`Comparing new composite quantity and old composite quantity minus one (${quantity} vs. ${c.quantity - 1})`);
+        expect(parseInt(quantity)).toEqual(c.quantity - 1);
+      })
+      .then(() => done());
   }));
 });
