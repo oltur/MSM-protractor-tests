@@ -63,7 +63,25 @@ describe('MSM site composite products test', function () {
       .then(quantity => {
         o.log(`Saving quantity of ${quantity}`);
         c.quantity = parseInt(quantity);
-
+      })
+      .then(() => {
+        o.log(`Refreshing the Basket page`);
+        b2.waitForAngularEnabled(false);
+        return d2.get(h2.getAbsoluteUrl('/Checkout/ReviewCart.aspx'));
+      })
+      .then(() => {
+        o.log(`Checking for Pizza Mozarella (productid="3738") in the Basket page`);
+        return h2.findAndWaitForVisible(by.xpath('//li[@productid="3738"]'))
+      })
+      .then(pizzaCell => {
+        o.log(`Getting old Pizza Mozarella quantity`);
+        return h2.findAndGetText(by.css('.Quantity'), pizzaCell)
+      })
+      .then(pizzaQuantity => {
+        o.log(`Saving Pizza Mozarella quantity of ${pizzaQuantity}`);
+        c.pizzaQuantity = parseInt(pizzaQuantity)
+      })
+      .then(() => {
         o.log("Adding one more item of composite product to basket");
         return h.findAndClick(by.css('.AddBtnWrp'), c.productCell);
       })
@@ -95,12 +113,12 @@ describe('MSM site composite products test', function () {
         return h2.findAndWaitForVisible(by.xpath('//li[@productid="3738"]'))
       })
       .then(pizzaCell => {
-        o.log(`Getting Pizza Mozarella quantity`);
+        o.log(`Getting new Pizza Mozarella quantity`);
         return h2.findAndGetText(by.css('.Quantity'), pizzaCell)
       })
       .then(pizzaQuantity => {
-        o.log(`Checking if Pizza Mozarella's quantity (${pizzaQuantity}) is greater or equal to composite's quantity (${c.quantity})`);
-        expect(parseInt(pizzaQuantity)).not.toBeLessThan(c.quantity);
+        o.log(`Checking if Pizza Mozarella's quantity (${pizzaQuantity}) is old Pizza Mozarella's quantity plus one (${c.pizzaQuantity + 1})`);
+        expect(parseInt(pizzaQuantity)).toEqual(c.pizzaQuantity + 1);
       })
       .then(() => {
         o.log("Removing one item of composite product from basket");
