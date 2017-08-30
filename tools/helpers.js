@@ -49,7 +49,7 @@ class Helpers {
         });
     }
 
-    prepareMainPage() {
+    checkStartPage() {
         let result =
             this.login()
                 .then(() => {
