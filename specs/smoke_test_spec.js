@@ -15,7 +15,7 @@ describe('MSM site smoke test', function () {
   beforeEach(() => {
     out.group();
     d.ignoreSynchronization = true;
-    d.get(testData.startPage);
+    d.get(h.getStartPage());
   });
 
   afterEach(() => {
