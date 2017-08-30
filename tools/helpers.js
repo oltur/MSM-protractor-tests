@@ -61,11 +61,9 @@ class Helpers {
     }
 
     getPizzaDataFromBasket(data) {
-        return promise.then(() => {
-            this.o.log(`Refreshing the Basket page`);
-            this.b.waitForAngularEnabled(false);
-            return this.d.get(getAbsoluteUrl('/Checkout/ReviewCart.aspx'));
-        })
+        this.o.log(`Refreshing the Basket page`);
+        this.b.waitForAngularEnabled(false);
+        return this.d.get(getAbsoluteUrl('/Checkout/ReviewCart.aspx'))
             .then(() => {
                 this.o.log(`Checking for Pizza Mozarella (productid="3738") in the Basket page`);
                 return findAndWaitForVisible(by.xpath('//li[@productid="3738"]'))
