@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/oltur/protractor-sample#readme",
   "dependencies": {
+    "mongoose": "^4.11.9",
     "protractor": "^5.1.2"
   },
   "devDependencies": {

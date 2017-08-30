@@ -7,7 +7,7 @@ class Out {
 
     log() {
         let prefix = 
-            Array(this.shift).join("\t") + 
+            Array(this.shift*4).join(" ") + 
         new Date().toISOString();
         Array.prototype.unshift.call(arguments, prefix);
         console.log.apply(this, arguments);

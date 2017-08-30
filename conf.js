@@ -2,7 +2,7 @@
 exports.config = {
   framework: 'jasmine',
   seleniumAddress: 'http://localhost:4445/wd/hub',
-  specs: ['spec.js'],
+  specs: ['specs/composite_products_spec.js'],
   multiCapabilities: [
     // {
     //   browserName: 'firefox'

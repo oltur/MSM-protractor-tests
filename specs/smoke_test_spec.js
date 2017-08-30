@@ -1,14 +1,14 @@
-var testData = require('./json/test-data.json');
-var out = require('./tools/out.js').getInstance();
+var testData = require('../json/test-data.json');
+var out = require('../tools/out.js').getInstance();
 var until = require('selenium-webdriver').until;
-var db = require('./tools/db.js').getInstance();
-var loginModel = require('./models/login-model.js').getInstance();
-var mainPageModel = require('./models/main-page-model.js').getInstance();
+var db = require('../tools/db.js').getInstance();
+var loginModel = require('../models/login-model.js').getInstance();
+var mainPageModel = require('../models/main-page-model.js').getInstance();
 
-describe('MSM site tests', function () {
+describe('MSM site smoke test', function () {
 
   var d = browser.driver;
-  var h = require('./tools/helpers.js').getInstance(d, out);
+  var h = require('../tools/helpers.js').getInstance(d, out);
 
   var currentSpec;
 
