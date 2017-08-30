@@ -11,8 +11,8 @@ describe('MSM site composite products test', function () {
   var driver = browser.driver;
   var browser2 = browser.forkNewDriverInstance(false, false);
   var driver2 = browser2.driver;
-  var helpers = require('../tools/helpers.js').getInstance(driver, out);
-  var helpers2 = require('../tools/helpers.js').getInstance(driver2, out);
+  var helpers = require('../tools/helpers.js').getInstance(browser, out);
+  var helpers2 = require('../tools/helpers.js').getInstance(browser2, out);
 
   // #region shorthands
   // shorthands
@@ -65,17 +65,7 @@ describe('MSM site composite products test', function () {
         c.quantity = parseInt(quantity);
       })
       .then(() => {
-        o.log(`Refreshing the Basket page`);
-        b2.waitForAngularEnabled(false);
-        return d2.get(h2.getAbsoluteUrl('/Checkout/ReviewCart.aspx'));
-      })
-      .then(() => {
-        o.log(`Checking for Pizza Mozarella (productid="3738") in the Basket page`);
-        return h2.findAndWaitForVisible(by.xpath('//li[@productid="3738"]'))
-      })
-      .then(pizzaCell => {
-        o.log(`Getting old Pizza Mozarella quantity`);
-        return h2.findAndGetText(by.css('.Quantity'), pizzaCell)
+        return h2.getPizzaDataFromBasket();
       })
       .then(pizzaQuantity => {
         o.log(`Saving Pizza Mozarella quantity of ${pizzaQuantity}`);

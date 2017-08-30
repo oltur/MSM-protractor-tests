@@ -8,8 +8,9 @@ var testData = require('../json/test-data.json');
 
 class Helpers {
 
-    constructor(d, o) {
-        this.d = d;
+    constructor(b, o) {
+        this.b = b;
+        this.d = b.driver;
         this.o = o;
     }
 
@@ -57,6 +58,22 @@ class Helpers {
                     return this.findAndExpectTextContain(by.id(mainPageModel.ListTitle), ' Top Offers')
                 });
         return result;
+    }
+
+    getPizzaDataFromBasket(data) {
+        return promise.then(() => {
+            this.o.log(`Refreshing the Basket page`);
+            this.b.waitForAngularEnabled(false);
+            return this.d.get(getAbsoluteUrl('/Checkout/ReviewCart.aspx'));
+        })
+            .then(() => {
+                this.o.log(`Checking for Pizza Mozarella (productid="3738") in the Basket page`);
+                return findAndWaitForVisible(by.xpath('//li[@productid="3738"]'))
+            })
+            .then(pizzaCell => {
+                this.o.log(`Getting Pizza Mozarella quantity`);
+                return findAndGetText(by.css('.Quantity'), pizzaCell)
+            })
     }
 
     login() {

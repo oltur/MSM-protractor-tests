@@ -8,7 +8,7 @@ var mainPageModel = require('../models/main-page-model.js').getInstance();
 describe('MSM site smoke test', function () {
 
   var d = browser.driver;
-  var h = require('../tools/helpers.js').getInstance(d, out);
+  var h = require('../tools/helpers.js').getInstance(browser, out);
 
   var currentSpec;
 
