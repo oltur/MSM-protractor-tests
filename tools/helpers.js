@@ -27,6 +27,10 @@ class Helpers {
         return handler;
     }
 
+    findAndGetText(by, root) {
+        return this.findAndWaitForVisible(by, root).then(elem => elem.getText());
+    }
+
     findAndClick(by, root) {
         return this.findAndWaitForVisible(by, root).then(elem => elem.click());
     }
@@ -56,6 +60,7 @@ class Helpers {
     }
 
     login() {
+        this.o.group("Loggin in...");
         this.o.log('Finding iframeForm');
         let result =
             this.d.findElement(by.id(loginModel.iframeForm))
@@ -84,8 +89,9 @@ class Helpers {
                     return this.d.switchTo().defaultContent();
                 })
                 .then(() => {
-                    this.d.sleep(5000);
-                    this.o.log("Clicking StartShoppingBtn");
+                    this.o.log("Waiting a bit and Clicking StartShoppingBtn");
+                    this.d.sleep(3000);
+                    this.o.groupEnd();
                     return this.findAndClick(by.className(loginModel.StartShoppingBtn));
                 })
         return result;
