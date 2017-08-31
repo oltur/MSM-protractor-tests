@@ -43,7 +43,7 @@ describe('MSM site smoke test', function () {
     h.login()
       .then(() => {
         out.log("Verifying ListTitle");
-        return h.findAndExpectTextContain(mainPageModel.$ListTitle, ' Top Offers')
+        return h.findAndExpectTextContain(mainPageModel.$listTitle, ' Top Offers')
       })
       .then(() => done());
   }));
