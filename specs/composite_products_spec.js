@@ -1,5 +1,7 @@
+"use strict";
 var until = require('selenium-webdriver').until;
-var mainPageModel = require('../models/main-page-model.js').getInstance();
+var mainPage = require('../models/main-page-model.js').getInstance();
+var pageUrls = require('../models/page-urls-model.js').getInstance();
 
 var db = require('../tools/db.js').getInstance();
 
@@ -50,25 +52,22 @@ describe('MSM site composite products test', function () {
       .then(recordsets => {
         c.compositeId = recordsets[0][0]["CompositeProductID"];
         c.compositeText = recordsets[0][0]["Name"];
-        // // TODO: make configurable
-        // c.compositeId = 12000000;
-        // c.compositeText = 'Test Bundle with 2 items of different quantity';
 
         return Promise.all([h.checkStartPage(), h2.checkStartPage()]);
       })
       .then(() => {
         o.log("In the beginning opening Product Page to hunt for composite parts");
-        return d.get(h.getAbsoluteUrl(`/product/${c.compositeId}`))
+        return d.get(h.getAbsoluteUrl(pageUrls.getProductPage(c.compositeId)))
       })
       .then(() => {
         o.log("Getting all product parts' cells");
-        return d.findElements(by.css('.NgMspProductCell'));
+        return d.findElements(mainPage.$ngMspProductCell);
       })
       .then((elems) => {
         o.log("Getting their productid attributes");
         c.partElements = elems;
 
-        const promises = c.partElements.map(x => x.getAttribute("productid"));
+        const promises = c.partElements.map(x => x.getAttribute(mainPage.productId));
 
         return Promise.all(promises);
       })
@@ -76,7 +75,6 @@ describe('MSM site composite products test', function () {
         o.log("Getting the values");
 
         const ids = values.map(x => parseInt(x));
-        //const quantities = elems.map(x => parseInt(x.getAttribute("productid")));
 
         c.compositePartIds = ids;//[3738, 8794];
         //c.compositePartQuantities = { [3738]: 1, [8794]: 2 };
@@ -84,7 +82,7 @@ describe('MSM site composite products test', function () {
       })
       .then(() => {
         o.log("Getting all product parts' quantity labels");
-        let promises = c.partElements.map(x => h2.findAndGetText(by.css('.LabelText'), x));
+        let promises = c.partElements.map(x => h2.findAndGetText(mainPage.$labelText, x));
         return Promise.all(promises);
       })
       .then(values => {
@@ -102,20 +100,20 @@ describe('MSM site composite products test', function () {
       })
       .then(() => {
         o.log("Opening My Top Offers");
-        return d.get(h.getAbsoluteUrl('/shelf/PersonalOffers_my_top_offers'))
+        return d.get(h.getAbsoluteUrl(pageUrls.myTopOffers))
       })
       .then(() => {
-        o.log(`Finding composite #${c.compositeId}`);
-        return h.findAndWaitForVisible(by.xpath('//li[@productid="' + c.compositeId + '"]'))
+        o.log(`Finding composite cell of #${c.compositeId}`);
+        return h.findAndWaitForVisible(mainPage.$getProductCell(c.compositeId))
       })
       .then(productCell => {
         c.productCell = productCell;
         o.log(`Checking if composite has correct text of '${c.compositeText}'`);
-        return h.findAndWaitForVisible(by.xpath('//b[text()="' + c.compositeText + '"]'), c.productCell);
+        return h.findAndWaitForVisible(mainPage.productCell.$getSpecificCompositeName(c.compositeText), c.productCell);
       })
       .then(() => {
         o.log("Finding composite Quantity element and getting its text");
-        return h.findAndGetText(by.xpath('//span[@class="Quantity"]'), c.productCell)
+        return h.findAndGetText(mainPage.productCell.$quantity, c.productCell)
       })
       .then(quantity => {
         o.log(`Saving composite quantity of ${quantity}`);
@@ -130,12 +128,12 @@ describe('MSM site composite products test', function () {
       })
       .then(() => {
         o.log("Adding one more item of composite product to basket");
-        return h.findAndClick(by.css('.AddBtnWrp'), c.productCell);
+        return h.findAndClick(mainPage.productCell.$addBtnWrp, c.productCell);
       })
       .then(() => {
         o.log("Waiting a bit and Finding composite Quantity element and Getting its text again");
         d.sleep(3000);
-        return h.findAndGetText(by.xpath('//span[@class="Quantity"]'), c.productCell)
+        return h.findAndGetText(mainPage.productCell.$quantity, c.productCell)
       })
       .then(quantity => {
         o.log(`Comparing new composite quantity and old composite quantity plus one (${quantity} vs. ${c.quantity + 1})`);
@@ -157,12 +155,12 @@ describe('MSM site composite products test', function () {
       })
       .then(() => {
         o.log("Removing one item of composite product from basket");
-        return h.findAndClick(by.css('.RemoveBtnWrp'), c.productCell);
+        return h.findAndClick(mainPage.productCell.$removeBtnWrp, c.productCell);
       })
       .then(() => {
         o.log("Waiting a bit and Finding composite Quantity element and Getting its text again");
         d.sleep(3000);
-        return h.findAndGetText(by.xpath('//span[@class="Quantity"]'), c.productCell)
+        return h.findAndGetText(mainPage.productCell.$quantity, c.productCell)
       })
       .then(quantity => {
         o.log(`Comparing new composite quantity and old composite quantity minus one (${quantity} vs. ${c.quantity - 1})`);

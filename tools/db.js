@@ -1,3 +1,4 @@
+"use strict";
 const testData = require('../json/test-data.json');
 const sql = require('mssql');
 

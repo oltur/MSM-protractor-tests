@@ -1,3 +1,4 @@
+"use strict";
 var testData = require('../json/test-data.json');
 var out = require('../tools/out.js').getInstance();
 var until = require('selenium-webdriver').until;
@@ -42,7 +43,7 @@ describe('MSM site smoke test', function () {
     h.login()
       .then(() => {
         out.log("Verifying ListTitle");
-        return h.findAndExpectTextContain(by.id(mainPageModel.ListTitle), ' Top Offers')
+        return h.findAndExpectTextContain(mainPageModel.$ListTitle, ' Top Offers')
       })
       .then(() => done());
   }));
