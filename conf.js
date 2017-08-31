@@ -3,7 +3,7 @@ exports.config = {
   framework: 'jasmine',
   seleniumAddress: 'http://localhost:4445/wd/hub',
   specs: [
-    'specs/smoke_test_spec.js',
+//    'specs/smoke_test_spec.js',
     'specs/composite_products_spec.js',
   ],
   multiCapabilities: [

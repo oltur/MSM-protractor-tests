@@ -8,7 +8,7 @@ class Db {
     }
 
     getData(cs = testData.db.csFreedomSite, query = "select * from DpnDatabaseProperties where Name ='Database Version'", parameters = []) {
-
+        sql.close();
         return sql.connect(cs)
             .then(pool => {
                 let request = pool.request();

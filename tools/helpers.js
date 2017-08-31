@@ -16,6 +16,25 @@ class Helpers {
         this.o = o;
     }
 
+    logout() {
+        return this.d.findElement(by.className('AuthUserName'))
+            .then((elem) => {
+                return elem.click();
+            }, (error) => {
+                return Promise.resolve(null);
+            })
+            .then((elem) => {
+                if (!elem) {
+                    return Promise.resolve(null);
+                }
+
+                return this.d.findElement(by.id('SignOut'))
+                    .then((elem) => {
+                        return elem.click();
+                    })
+            });
+    }
+
     getStartPage() {
         let t = this.getAbsoluteUrl(testData.startPage);
         return t;
@@ -57,7 +76,7 @@ class Helpers {
             this.login()
                 .then(() => {
                     this.o.log("Verifying ListTitle");
-                    return this.findAndExpectTextContain(mainPage.$listTitle, ' Top Offers')
+                    return this.findAndWaitForVisible(mainPage.$listTitle)
                 });
         return result;
     }
@@ -96,15 +115,12 @@ class Helpers {
         // this.o.group("Loggin in...");
         // this.o.log('Finding iframeForm');
         let result =
-            this.d.findElement(loginModel.$iframeForm)
-                .then(elem => {
-                    // this.o.log('Switching to iframeForm');
-                    return this.d.switchTo().frame(elem)
-                })
-                .then(() => {
-                    // this.o.log("Filling Email");
-                    return this.findAndSendKeys(loginModel.$Email, testData.accessData.userName)
-                })
+            // this.d.findElement(loginModel.$iframeForm)
+            //     .then(elem => {
+            //         // this.o.log('Switching to iframeForm');
+            //         return this.d.switchTo().frame(elem)
+            //     })
+            this.findAndSendKeys(loginModel.$Email, testData.accessData.userName)
                 .then((elem) => {
                     // this.o.log("Filling PasswordLogin");
                     return this.findAndSendKeys(loginModel.$PasswordLogin, testData.accessData.password);
@@ -117,15 +133,21 @@ class Helpers {
                     // this.o.log("Clicking ContinueButton");
                     return this.findAndClick(loginModel.$ContinueButton);
                 })
-                .then((elem) => {
-                    // this.o.log("Switching to default context");
-                    return this.d.switchTo().defaultContent();
-                })
+                // .then((elem) => {
+                //     // this.o.log("Switching to default context");
+                //     return this.d.switchTo().defaultContent();
+                // })
                 .then(() => {
                     // this.o.log("Waiting a bit and Clicking StartShoppingBtn");
                     this.d.sleep(3000);
                     //this.o.groupEnd();
-                    return this.findAndClick(loginModel.$StartShoppingBtn);
+                    return this.findAndClick(loginModel.$StartShoppingBtn)
+                        .then(() => {
+                            return Promise.resolve(true);
+                        })
+                        .catch(() => {
+                            return Promise.resolve(true);
+                        });
                 })
         return result;
     }

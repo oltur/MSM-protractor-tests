@@ -17,6 +17,8 @@ describe('MSM site smoke test', function () {
     out.group();
     d.ignoreSynchronization = true;
     d.get(h.getStartPage());
+    // h.logout()
+    // d.get(h.getStartPage());
   });
 
   afterEach(() => {
@@ -43,7 +45,7 @@ describe('MSM site smoke test', function () {
     h.login()
       .then(() => {
         out.log("Verifying ListTitle");
-        return h.findAndExpectTextContain(mainPageModel.$listTitle, ' Top Offers')
+        return h.findAndExpectTextContain(mainPageModel.$listTitle, ' Savvy Buys')
       })
       .then(() => done());
   }));

@@ -7,6 +7,6 @@
         "csFreedomSite" : "mssql://sa:sa@localhost/FreedomSite"
     },
     "baseUrl": "https://www.mysupermarket.co.uk",
-    "startPage": "/?LandingScript=click::{%22ID%22:%22SignIn%22}",
+    "startPage": "/administration/SignIn",
     "timeout": 60000
 }
