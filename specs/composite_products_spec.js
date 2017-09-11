@@ -15,8 +15,8 @@ describe('MSM site composite products test', function () {
   var driver = browser.driver;
   var browser2 = browser.forkNewDriverInstance(false, false);
   var driver2 = browser2.driver;
-  var helpers = require('../tools/helpers.js').getInstance(browser, out);
-  var helpers2 = require('../tools/helpers.js').getInstance(browser2, out);
+  var helpers = require('../tools/helpers.js').getInstance(browser, out, context);
+  var helpers2 = require('../tools/helpers.js').getInstance(browser2, out, context);
 
   // #region shorthands
   // shorthands

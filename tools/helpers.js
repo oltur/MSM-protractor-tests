@@ -10,10 +10,63 @@ var testData = require('../json/test-data.json');
 
 class Helpers {
 
-    constructor(b, o) {
+    constructor(b, o, c) {
         this.b = b;
         this.d = b.driver;
         this.o = o;
+        this.c = c;
+    }
+
+    testProductPagesAndGoToStore(productIds, index) {
+        if (index >= productIds.length) {
+            return Promise.resolve(null);
+        }
+
+        const productId = productIds[index];
+
+        this.o.log(`Going to Product page #${productId}`);
+        return this.d.get(this.getAbsoluteUrl(pageUrls.getProductPage(productId)))
+            .then(() => {
+                //this.o.log(`1`);
+                return this.findAndClick(by.xpath("//div[@class='RedirectToRetailerBtn' and @storeid='1']"))
+            })
+            .then(() => {
+                //                this.o.log(`2`);
+                return this.d.getAllWindowHandles()
+            })
+            .then((handles) => {
+                //                this.o.log(`3`);
+                this.c.tabs = handles;
+                const foreignTab = this.c.tabs[1];
+                return this.d.switchTo().window(foreignTab);
+            })
+            .then(() => {
+                //                this.o.log(`4`);
+                //return this.findAndWaitForVisible(by.xpath("//span[text()[contains(.,'The Famous Grouse Scotch Whisky 1 Litre')]]"));
+                //return this.findAndWaitForVisible(by.xpath("//div"));
+                return this.d.getTitle();
+            })
+            .then((title) => {
+                //                this.o.log(`4`);
+                this.o.log(`Title: ${title}`);
+                return this.d.close();
+            })
+            .then(() => {
+                //this.o.log(`6`);
+                const target = this.c.tabs[0];
+                //delete this.c.tabs;
+                return this.d.switchTo().window(target);
+            })
+            .then(() => {
+                //this.o.log(`7`);
+                return this.testProductPagesAndGoToStore(productIds, index + 1);
+            })
+            .catch((error) => {
+                // error handler
+                //this.o.log(`8`);
+                this.o.log(`Product #${productId} not found`);
+                return this.testProductPagesAndGoToStore(productIds, index + 1);
+            })
     }
 
     logout() {
@@ -62,7 +115,7 @@ class Helpers {
     }
 
     findAndExpectTextContain(by, textContain, root) {
-        return this.findAndWaitForVisible(by, root).then(elem => 
+        return this.findAndWaitForVisible(by, root).then(elem =>
             expect(elem.getText()).toContain(textContain));
     }
 
@@ -140,7 +193,7 @@ class Helpers {
                 // })
                 .then(() => {
                     // this.o.log("Waiting a bit and Clicking StartShoppingBtn");
-                    this.d.sleep(3000);
+                    this.d.sleep(2000);
                     //this.o.groupEnd();
                     return this.findAndClick(loginModel.$StartShoppingBtn)
                         .then(() => {
@@ -154,4 +207,4 @@ class Helpers {
     }
 }
 
-exports.getInstance = (d, o) => new Helpers(d, o);
+exports.getInstance = (d, o, c) => new Helpers(d, o, c);
