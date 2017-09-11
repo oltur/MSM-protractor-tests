@@ -38,6 +38,8 @@ describe('MSM site composite products test', function () {
     b2.waitForAngularEnabled(false);
     d.get(h.getStartPage());
     d2.get(h2.getStartPage());
+    h.logoutIfNeeded();
+    h2.logoutIfNeeded();
     // h.logout()
     // h2.logout()
     // d.get(h.getStartPage());

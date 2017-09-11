@@ -30,9 +30,7 @@ describe('MSM site smoke test', function () {
   beforeEach(() => {
     out.group();
     d.ignoreSynchronization = true;
-    d.get(h.getStartPage());
-    // h.logout()
-    // d.get(h.getStartPage());
+    h.logoutIfNeeded()
   });
 
   afterEach(() => {
@@ -48,14 +46,14 @@ describe('MSM site smoke test', function () {
   // }));
 
   currentSpec = it('should have a title', h.getHandler(currentSpec, (done) => {
-    out.log(`Test name: '${currentSpec.description}'`);
+    out.log(`Test name: 'should have a title'`);
     out.log("Verifying title");
     expect(d.getTitle()).toContain('mySupermarket');
     done()
   }));
 
   currentSpec = it('should login and open a main page', h.getHandler(currentSpec, (done) => {
-    out.log(`Test name: '${currentSpec.description}'`);
+    out.log(`Test name: 'should login and open a main page'`);
     h.login()
       .then(() => {
         out.log("Verifying ListTitle");
@@ -65,7 +63,7 @@ describe('MSM site smoke test', function () {
   }));
 
   currentSpec = it('should login, open a Product page and use Go to store button', h.getHandler(currentSpec, (done) => {
-    out.log(`Test name: '${currentSpec.description}'`);
+    out.log(`Test name: 'should login, open a Product page and use Go to store button'`);
     h.login()
       .then(() => {
         return h.testProductPagesAndGoToStore(testData.goToStore.productIds, 0);

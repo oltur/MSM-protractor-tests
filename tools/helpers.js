@@ -17,6 +17,26 @@ class Helpers {
         this.c = c;
     }
 
+    logoutIfNeeded() {
+        this.o.log(`Trying to log out`);
+        return this.d.get(this.getStartPage())
+            .then(() => {
+                return this.findAndClick(by.xpath("//div[@class='UserNameSection']"))
+            })
+            .then(() => {
+                this.d.sleep(2000);
+                return this.findAndClick(by.xpath("//li[@class='LinkHover1']/a[@formtype='SignOut']"))
+            })
+            .then(() => {
+                return this.d.get(this.getStartPage());
+            })
+            .catch((error) => {
+                // error handler
+                this.o.log(`Already logged out`);
+                return Promise.resolve(null);
+            });
+    }
+
     testProductPagesAndGoToStore(productIds, index) {
         if (index >= productIds.length) {
             return Promise.resolve(null);
@@ -168,13 +188,7 @@ class Helpers {
         this.o.log("Loggin in...");
         // this.o.group("Loggin in...");
         // this.o.log('Finding iframeForm');
-        let result =
-            // this.d.findElement(loginModel.$iframeForm)
-            //     .then(elem => {
-            //         // this.o.log('Switching to iframeForm');
-            //         return this.d.switchTo().frame(elem)
-            //     })
-            this.findAndSendKeys(loginModel.$Email, testData.accessData.userName)
+        let result = this.findAndSendKeys(loginModel.$Email, testData.accessData.userName)
                 .then((elem) => {
                     // this.o.log("Filling PasswordLogin");
                     return this.findAndSendKeys(loginModel.$PasswordLogin, testData.accessData.password);
