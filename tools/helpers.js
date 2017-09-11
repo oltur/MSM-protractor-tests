@@ -62,7 +62,8 @@ class Helpers {
     }
 
     findAndExpectTextContain(by, textContain, root) {
-        return this.findAndWaitForVisible(by, root).then(elem => expect(elem.getText()).toContain(textContain));
+        return this.findAndWaitForVisible(by, root).then(elem => 
+            expect(elem.getText()).toContain(textContain));
     }
 
     findAndWaitForVisible(by, root) {
