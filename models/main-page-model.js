@@ -1,9 +1,11 @@
 "use strict";
 class ProductCell {
     $getSpecificCompositeName(text) { return by.xpath('//b[text()="' + text + '"]'); }
+    get $cashbackLabel() { return by.css('.BundleCashbakLabel'); }
     get $quantity() { return by.css('.Quantity'); }
     get $addBtnWrp() { return by.css('.AddBtnWrp'); }
     get $removeBtnWrp() { return by.css('.RemoveBtnWrp'); }
+    get $simpleAdd() {return by.css('.Add'); }
 }
 
 class MainPageModel {

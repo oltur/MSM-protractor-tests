@@ -118,8 +118,18 @@ describe('MSM site composite products test', function () {
         return h.findAndWaitForVisible(mainPage.productCell.$getSpecificCompositeName(c.compositeText), c.productCell);
       })
       .then(() => {
+        o.log(`Checking if composite has cashback label`);
+        return h.findAndWaitForVisible(mainPage.productCell.$cashbackLabel, c.productCell);
+      })
+      .then(() => {
         o.log("Finding composite Quantity element and getting its text");
-        return h.findAndGetText(mainPage.productCell.$quantity, c.productCell)
+        return h.findAndGetText(mainPage.productCell.$quantity, c.productCell, 1000)
+          .then(quantity => {
+            Promise.resolve(quanitity);
+          },
+          (error) => {
+            Promise.resolve(0);
+          });
       })
       .then(quantity => {
         o.log(`Saving composite quantity of ${quantity}`);
@@ -131,15 +141,29 @@ describe('MSM site composite products test', function () {
       .then(basketQuantities => {
         o.log(`Saving products quantities of composite parts ${JSON.stringify(basketQuantities)}`);
         c.basketQuantities = basketQuantities;
+        return Promise.resolve(null);
       })
       .then(() => {
         o.log("Adding one more item of composite product to basket");
-        return h.findAndClick(mainPage.productCell.$addBtnWrp, c.productCell);
+        return h.findAndClick(mainPage.productCell.$addBtnWrp, c.productCell, 1000)
+          .then(() => {
+            return Promise.resolve(null);
+          },
+          (error) => {
+            // "+" noy found - maybe quantity is zero now? Press simple mode button
+            return h.findAndClick(mainPage.productCell.$simpleAdd, c.productCell);
+          });
       })
       .then(() => {
         o.log("Waiting a bit and Finding composite Quantity element and Getting its text again");
         d.sleep(3000);
         return h.findAndGetText(mainPage.productCell.$quantity, c.productCell)
+          .then((quantity) => {
+            return Promise.resolve(quantity);
+          },
+          (error) => {
+            return Promise.resolve(0);
+          });
       })
       .then(quantity => {
         o.log(`Comparing new composite quantity and old composite quantity plus one (${quantity} vs. ${c.quantity + 1})`);
@@ -172,6 +196,9 @@ describe('MSM site composite products test', function () {
         o.log(`Comparing new composite quantity and old composite quantity minus one (${quantity} vs. ${c.quantity - 1})`);
         expect(parseInt(quantity)).toEqual(c.quantity - 1);
       })
-      .then(() => done());
+      .then(() => done(),
+      error => {
+        throw new Error("Test failed. Reason: " + error)
+      });
   }));
 });

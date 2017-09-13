@@ -28,6 +28,7 @@ class Helpers {
                 return this.findAndClick(by.xpath("//li[@class='LinkHover1']/a[@formtype='SignOut']"))
             })
             .then(() => {
+                this.d.sleep(1000);
                 return this.d.get(this.getStartPage());
             })
             .catch((error) => {
@@ -67,7 +68,8 @@ class Helpers {
                 return this.d.getTitle();
             })
             .then((title) => {
-                //                this.o.log(`4`);
+                this.o.log(`Going to Tesco page for product #${productId}`);
+                //                this.o.log(`5`);
                 this.o.log(`Title: ${title}`);
                 return this.d.close();
             })
@@ -122,26 +124,27 @@ class Helpers {
         return handler;
     }
 
-    findAndGetText(by, root) {
-        return this.findAndWaitForVisible(by, root).then(elem => elem.getText());
+    findAndGetText(by, root, timeout = undefined) {
+        return this.findAndWaitForVisible(by, root, timeout).then(elem => elem.getText());
     }
 
-    findAndClick(by, root) {
-        return this.findAndWaitForVisible(by, root).then(elem => elem.click());
+    findAndClick(by, root, timeout = undefined) {
+        return this.findAndWaitForVisible(by, root, timeout).then(elem => elem.click());
     }
 
-    findAndSendKeys(by, keys, root) {
-        return this.findAndWaitForVisible(by, root).then(elem => elem.sendKeys(keys));
+    findAndSendKeys(by, keys, root, timeout = undefined) {
+        return this.findAndWaitForVisible(by, root, timeout).then(elem => elem.sendKeys(keys));
     }
 
-    findAndExpectTextContain(by, textContain, root) {
-        return this.findAndWaitForVisible(by, root).then(elem =>
+    findAndExpectTextContain(by, textContain, root, timeout = undefined) {
+        return this.findAndWaitForVisible(by, root, timeout).then(elem =>
             expect(elem.getText()).toContain(textContain));
     }
 
-    findAndWaitForVisible(by, root) {
+    findAndWaitForVisible(by, root, timeout = undefined) {
         return (root ? root : this.d).findElement(by).then(elem => {
-            return this.d.wait(until.elementIsVisible(elem)).then(() => Promise.resolve(elem));
+            return this.d.wait(until.elementIsVisible(elem), timeout)
+                .then(() => Promise.resolve(elem));
         });
     }
 
@@ -181,6 +184,9 @@ class Helpers {
         return this.findAndWaitForVisible(mainPage.$getProductCell(productId))
             .then(pizzaCell => {
                 return this.findAndGetText(mainPage.productCell.$quantity, pizzaCell)
+            },
+            error => {
+                return Promise.resolve(0);
             })
     }
 
@@ -189,34 +195,34 @@ class Helpers {
         // this.o.group("Loggin in...");
         // this.o.log('Finding iframeForm');
         let result = this.findAndSendKeys(loginModel.$Email, testData.accessData.userName)
-                .then((elem) => {
-                    // this.o.log("Filling PasswordLogin");
-                    return this.findAndSendKeys(loginModel.$PasswordLogin, testData.accessData.password);
-                })
-                .then((elem) => {
-                    // this.o.log("Clicking SignInButton");
-                    return this.findAndClick(loginModel.$SignInButton);
-                })
-                .then((elem) => {
-                    // this.o.log("Clicking ContinueButton");
-                    return this.findAndClick(loginModel.$ContinueButton);
-                })
-                // .then((elem) => {
-                //     // this.o.log("Switching to default context");
-                //     return this.d.switchTo().defaultContent();
-                // })
-                .then(() => {
-                    // this.o.log("Waiting a bit and Clicking StartShoppingBtn");
-                    this.d.sleep(2000);
-                    //this.o.groupEnd();
-                    return this.findAndClick(loginModel.$StartShoppingBtn)
-                        .then(() => {
-                            return Promise.resolve(true);
-                        })
-                        .catch(() => {
-                            return Promise.resolve(true);
-                        });
-                })
+            .then((elem) => {
+                // this.o.log("Filling PasswordLogin");
+                return this.findAndSendKeys(loginModel.$PasswordLogin, testData.accessData.password);
+            })
+            .then((elem) => {
+                // this.o.log("Clicking SignInButton");
+                return this.findAndClick(loginModel.$SignInButton);
+            })
+            .then((elem) => {
+                // this.o.log("Clicking ContinueButton");
+                return this.findAndClick(loginModel.$ContinueButton);
+            })
+            // .then((elem) => {
+            //     // this.o.log("Switching to default context");
+            //     return this.d.switchTo().defaultContent();
+            // })
+            .then(() => {
+                // this.o.log("Waiting a bit and Clicking StartShoppingBtn");
+                this.d.sleep(2000);
+                //this.o.groupEnd();
+                return this.findAndClick(loginModel.$StartShoppingBtn)
+                    .then(() => {
+                        return Promise.resolve(true);
+                    })
+                    .catch(() => {
+                        return Promise.resolve(true);
+                    });
+            })
         return result;
     }
 }
