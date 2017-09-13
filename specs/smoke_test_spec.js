@@ -45,12 +45,12 @@ describe('MSM site smoke test', function () {
   //   });
   // }));
 
-  currentSpec = it('should have a title', h.getHandler(currentSpec, (done) => {
-    out.log(`Test name: 'should have a title'`);
-    out.log("Verifying title");
-    expect(d.getTitle()).toContain('mySupermarket');
-    done()
-  }));
+  // currentSpec = it('should have a title', h.getHandler(currentSpec, (done) => {
+  //   out.log(`Test name: 'should have a title'`);
+  //   out.log("Verifying title");
+  //   expect(d.getTitle()).toContain('mySupermarket');
+  //   done()
+  // }));
 
   currentSpec = it('should login and open a main page', h.getHandler(currentSpec, (done) => {
     out.log(`Test name: 'should login and open a main page'`);
@@ -59,7 +59,16 @@ describe('MSM site smoke test', function () {
         out.log("Verifying ListTitle");
         return h.findAndExpectTextContain(mainPageModel.$listTitle, 'Savvy Buys')
       })
-      .then(() => done());
+      .then(() => {
+        out.log("Clicking every menu item");
+
+        return h.clickEveryMenuItem();
+      })
+      .then(() => done()
+      // ,error => {
+      //   throw new Error("Test failed. Reason: " + error)
+      // }
+    );
   }));
 
 });

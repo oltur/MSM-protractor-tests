@@ -51,7 +51,10 @@ describe('MSM site smoke test', function () {
       .then(() => {
         return h.testProductPagesAndGoToStore(testData.goToStore.productIds, 0);
       })
-      .then(() => done());
+      .then(() => done(),
+      error => {
+        throw new Error("Test failed. Reason: " + error)
+      });
   }));
 
 });

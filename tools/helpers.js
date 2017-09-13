@@ -17,6 +17,34 @@ class Helpers {
         this.c = c;
     }
 
+    clickEveryMenuItem(index) {
+
+        if (!index)
+            index = 0;
+
+        return this.d.findElements(by.css("ul.DropDownMenu>li"))
+            .then(elements => {
+
+                if (index >= elements.length) {
+                    return Promise.resolve(null);
+                }
+
+                this.c.element = elements[index];
+                return this.d.wait(until.elementIsVisible(this.c.element))
+                    .then(() => {
+                        return this.c.element.getAttribute("data-shelfid");
+                    })
+                    .then((attrValue) => {
+                        this.o.log(`Clicking menu item of data-shelfid=${attrValue}`);
+                        return this.c.element.click();
+                    })
+                    .then(() => {
+                        delete this.c.element;
+                        return this.clickEveryMenuItem(index + 1)
+                    });
+            });
+    }
+
     logoutIfNeeded() {
         this.o.log(`Trying to log out`);
         return this.d.get(this.getStartPage())
