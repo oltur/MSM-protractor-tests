@@ -48,6 +48,10 @@ class Helpers {
         this.o.log(`Going to Product page #${productId}`);
         return this.d.get(this.getAbsoluteUrl(pageUrls.getProductPage(productId)))
             .then(() => {
+                //this.o.log(`0a`);
+                return this.findAndClick(by.css("div.SeeAllPrices"))
+            })
+            .then(() => {
                 //this.o.log(`1`);
                 return this.findAndClick(by.xpath("//div[@class='RedirectToRetailerBtn' and @storeid='1']"))
             })
