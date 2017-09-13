@@ -1,4 +1,5 @@
 "use strict";
+var _ = require('lodash');
 var until = require('selenium-webdriver').until;
 var url = require('url');
 
@@ -204,6 +205,9 @@ class Helpers {
                 productIds.forEach(productId => {
                     promises.push(this.getSingleProductDataFromBasket(productId));
                 });
+                // _.forEach(productIds, productId => {
+                //     promises.push(this.getSingleProductDataFromBasket(productId));
+                // });
 
                 return Promise.all(promises)
             })

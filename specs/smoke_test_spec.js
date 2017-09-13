@@ -53,7 +53,7 @@ describe('MSM site smoke test', function () {
   // }));
 
   currentSpec = it('should login and open a main page', h.getHandler(currentSpec, (done) => {
-    out.log(`Test name: 'should login and open a main page'`);
+    out.log(`Test name: 'should login, open a main page, and click through a menu'`);
     h.login()
       .then(() => {
         out.log("Verifying ListTitle");
