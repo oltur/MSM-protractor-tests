@@ -84,7 +84,7 @@ describe('MSM site composite products test', function () {
 
         c.compositePartIds = ids;//[3738, 8794];
         //c.compositePartQuantities = { [3738]: 1, [8794]: 2 };
-
+        return Promise.resolve(null);
       })
       .then(() => {
         o.log("Getting all product parts' quantity labels");
@@ -103,6 +103,7 @@ describe('MSM site composite products test', function () {
 
         c.compositePartQuantities = result;
         delete c.partElements;
+        return Promise.resolve(null);
       })
       .then(() => {
         o.log("Opening My Top Offers");
@@ -125,15 +126,16 @@ describe('MSM site composite products test', function () {
         o.log("Finding composite Quantity element and getting its text");
         return h.findAndGetText(mainPage.productCell.$quantity, c.productCell, 1000)
           .then(quantity => {
-            Promise.resolve(quanitity);
+            return Promise.resolve(quanitity);
           },
           (error) => {
-            Promise.resolve(0);
+            return Promise.resolve(0);
           });
       })
       .then(quantity => {
         o.log(`Saving composite quantity of ${quantity}`);
         c.quantity = parseInt(quantity);
+        return Promise.resolve(null);
       })
       .then(() => {
         return h2.getProductsDataFromBasket(c.compositePartIds);
@@ -151,13 +153,13 @@ describe('MSM site composite products test', function () {
           },
           (error) => {
             // "+" noy found - maybe quantity is zero now? Press simple mode button
-            return h.findAndClick(mainPage.productCell.$simpleAdd, c.productCell);
+            return h.findAndClick(mainPage.productCell.$simpleAdd, c.productCell, 1000);
           });
       })
       .then(() => {
         o.log("Waiting a bit and Finding composite Quantity element and Getting its text again");
         d.sleep(3000);
-        return h.findAndGetText(mainPage.productCell.$quantity, c.productCell)
+        return h.findAndGetText(mainPage.productCell.$quantity, c.productCell, 1000)
           .then((quantity) => {
             return Promise.resolve(quantity);
           },
@@ -182,6 +184,7 @@ describe('MSM site composite products test', function () {
           o.log(`Checking if #${element} quantity (${quantities[element]}) is old #${element} quantity plus ${c.compositePartQuantities[element]} (${parseInt(c.basketQuantities[element]) + c.compositePartQuantities[element]})`);
           expect(parseInt(quantities[element])).toEqual(parseInt(c.basketQuantities[element]) + c.compositePartQuantities[element]);
         })
+        return Promise.resolve(null);
       })
       .then(() => {
         o.log("Removing one item of composite product from basket");
@@ -190,11 +193,18 @@ describe('MSM site composite products test', function () {
       .then(() => {
         o.log("Waiting a bit and Finding composite Quantity element and Getting its text again");
         d.sleep(3000);
-        return h.findAndGetText(mainPage.productCell.$quantity, c.productCell)
+        return h.findAndGetText(mainPage.productCell.$quantity, c.productCell, 1000)
+          .then((quantity) => {
+            return Promise.resolve(quantity);
+          },
+          (error) => {
+            return Promise.resolve(0);
+          });
       })
       .then(quantity => {
         o.log(`Comparing new composite quantity and old composite quantity minus one (${quantity} vs. ${c.quantity - 1})`);
         expect(parseInt(quantity)).toEqual(c.quantity - 1);
+        return Promise.resolve(null);
       })
       .then(() => done(),
       error => {
