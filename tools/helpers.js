@@ -71,6 +71,11 @@ class Helpers {
             return Promise.resolve(null);
         }
 
+        if (index > 20) {
+            this.o.log(`Stopping after 20 products`);
+            return Promise.resolve(null);
+        }
+
         const productId = productIds[index];
 
         this.o.log(`Going to Product page #${productId}`);
