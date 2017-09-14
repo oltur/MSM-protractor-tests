@@ -1,12 +1,19 @@
 "use strict";
-var out = require('../tools/out.js').getInstance();
 var until = require('selenium-webdriver').until;
 
-var db = require('../tools/db.js').getInstance();
+var LoginModel = require('../models/login-model.js');
+var MainPage = require('../models/main-page-model.js');
+var PageUrls = require('../models/page-urls-model.js');
 
-var loginModel = require('../models/login-model.js').getInstance();
-var mainPageModel = require('../models/main-page-model.js').getInstance();
-var pageUrls = require('../models/page-urls-model.js').getInstance();
+var loginModel = new LoginModel();
+var mainPage = new MainPage();
+var pageUrls = new PageUrls();
+
+var Out = require('../tools/out.js');
+var Db = require('../tools/db.js');
+var db = new Db();
+
+var Helpers = require('../tools/helpers.js');
 
 describe('MSM site smoke test', function () {
 
@@ -14,9 +21,9 @@ describe('MSM site smoke test', function () {
   var currentSpec;
 
   var context = {};
-  var out = require('../tools/out.js').getInstance();
+  var out = new Out();
   var driver = browser.driver;
-  var helpers = require('../tools/helpers.js').getInstance(browser, out, context);
+  var helpers = new Helpers(browser, out, context);
 
   // #region shorthands
   // shorthands
@@ -49,11 +56,19 @@ describe('MSM site smoke test', function () {
     out.log(`Test name: 'should login, open a Product page and use Go to store button'`);
     h.login()
       .then(() => {
+        return d.get(h.getAbsoluteUrl(pageUrls.reviewCart))
+      })
+      .then(() => {
+        return h.findAndClick(by.id("RemoveOrder"))
+          .then(() => Promise.resolve(null),
+          error => Promise.resolve(null));
+      })
+      .then(() => {
         return h.testProductPagesAndGoToStore(testData.goToStore.productIds, 0);
       })
       .then(() => done(),
       error => {
-        throw new Error("Test failed. Reason: " + error)
+        throw new Error("Test failed. Reason: " + error + ' ' + error.stack)
       });
   }));
 

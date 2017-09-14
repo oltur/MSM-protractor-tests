@@ -1,9 +1,19 @@
 "use strict";
 var until = require('selenium-webdriver').until;
-var mainPage = require('../models/main-page-model.js').getInstance();
-var pageUrls = require('../models/page-urls-model.js').getInstance();
 
-var db = require('../tools/db.js').getInstance();
+var LoginModel = require('../models/login-model.js');
+var MainPage = require('../models/main-page-model.js');
+var PageUrls = require('../models/page-urls-model.js');
+
+var loginModel = new LoginModel();
+var mainPage = new MainPage();
+var pageUrls = new PageUrls();
+
+var Out = require('../tools/out.js');
+var Db = require('../tools/db.js');
+var db = new Db();
+
+var Helpers = require('../tools/helpers.js');
 
 describe('MSM site composite products test', function () {
 
@@ -11,13 +21,13 @@ describe('MSM site composite products test', function () {
   var currentSpec;
 
   var context = {};
-  var out = require('../tools/out.js').getInstance();
+  var out = new Out();
   var driver = browser.driver;
   var browser2 = browser.forkNewDriverInstance(false, false);
   var driver2 = browser2.driver;
-  var helpers = require('../tools/helpers.js').getInstance(browser, out, context);
-  var helpers2 = require('../tools/helpers.js').getInstance(browser2, out, context);
-
+  var helpers = new Helpers(browser, out, context);
+  var helpers2 = new Helpers(browser2, out, context);
+  
   // #region shorthands
   // shorthands
   var c = context;
@@ -126,7 +136,7 @@ describe('MSM site composite products test', function () {
         o.log("Finding composite Quantity element and getting its text");
         return h.findAndGetText(mainPage.productCell.$quantity, c.productCell, 1000)
           .then(quantity => {
-            return Promise.resolve(quanitity);
+            return Promise.resolve(quantity);
           },
           (error) => {
             return Promise.resolve(0);
@@ -208,7 +218,7 @@ describe('MSM site composite products test', function () {
       })
       .then(() => done(),
       error => {
-        throw new Error("Test failed. Reason: " + error)
+        throw new Error("Test failed. Reason: " + error + ' ' + error.stack)
       });
   }));
 });

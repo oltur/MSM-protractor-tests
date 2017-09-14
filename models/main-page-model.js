@@ -22,4 +22,4 @@ class MainPageModel {
 
 }
 
-exports.getInstance = () => new MainPageModel();
+module.exports = MainPageModel;

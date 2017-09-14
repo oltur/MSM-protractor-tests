@@ -1,12 +1,19 @@
 "use strict";
-var out = require('../tools/out.js').getInstance();
 var until = require('selenium-webdriver').until;
 
-var db = require('../tools/db.js').getInstance();
+var Out = require('../tools/out.js');
+var Db = require('../tools/db.js');
+var db = new Db();
 
-var loginModel = require('../models/login-model.js').getInstance();
-var mainPageModel = require('../models/main-page-model.js').getInstance();
-var pageUrls = require('../models/page-urls-model.js').getInstance();
+var LoginModel = require('../models/login-model.js');
+var MainPage = require('../models/main-page-model.js');
+var PageUrls = require('../models/page-urls-model.js');
+
+var loginModel = new LoginModel();
+var mainPage = new MainPage();
+var pageUrls = new PageUrls();
+
+var Helpers = require('../tools/helpers.js');
 
 describe('MSM site smoke test', function () {
 
@@ -14,9 +21,9 @@ describe('MSM site smoke test', function () {
   var currentSpec;
 
   var context = {};
-  var out = require('../tools/out.js').getInstance();
+  var out = new Out();
   var driver = browser.driver;
-  var helpers = require('../tools/helpers.js').getInstance(browser, out, context);
+  var helpers = new Helpers(browser, out, context);
 
   // #region shorthands
   // shorthands
@@ -65,9 +72,9 @@ describe('MSM site smoke test', function () {
         return h.clickEveryMenuItem();
       })
       .then(() => done()
-      // ,error => {
-      //   throw new Error("Test failed. Reason: " + error)
-      // }
+      ,error => {
+        throw new Error("Test failed. Reason: " + error + ' ' + error.stack)
+      }
     );
   }));
 

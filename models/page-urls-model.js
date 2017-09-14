@@ -10,4 +10,4 @@ class PageUrlsModel {
     get reviewCart() { return '/Checkout/ReviewCart.aspx'; }
 
 }
-exports.getInstance = () => new PageUrlsModel();
+module.exports = PageUrlsModel;

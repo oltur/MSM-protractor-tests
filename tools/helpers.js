@@ -3,19 +3,25 @@ var _ = require('lodash');
 var until = require('selenium-webdriver').until;
 var url = require('url');
 
-var loginModel = require('../models/login-model.js').getInstance();
-var mainPage = require('../models/main-page-model.js').getInstance();
-var pageUrls = require('../models/page-urls-model.js').getInstance();
+var LoginModel = require('../models/login-model.js');
+var MainPage = require('../models/main-page-model.js');
+var PageUrls = require('../models/page-urls-model.js');
+
+var loginModel = new LoginModel();
+var mainPage = new MainPage();
+var pageUrls = new PageUrls();
+
+var Db = require('../tools/db.js');
+var db = new Db();
 
 var testData = require('../json/test-data.json');
 
-class Helpers {
+const HelpersBase = require('./helpersBase.js');
+
+class Helpers extends HelpersBase {
 
     constructor(b, o, c) {
-        this.b = b;
-        this.d = b.driver;
-        this.o = o;
-        this.c = c;
+        super(b, o, c);
     }
 
     clickEveryMenuItem(index) {
@@ -268,4 +274,4 @@ class Helpers {
     }
 }
 
-exports.getInstance = (d, o, c) => new Helpers(d, o, c);
+module.exports = Helpers;

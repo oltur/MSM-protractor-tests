@@ -9,4 +9,4 @@ class LoginModel {
     get $ContinueButton() { return by.id("ContinueButton") };
     get $StartShoppingBtn() { return by.className("StartShoppingBtn") };
 }
-exports.getInstance = () => new LoginModel();
+module.exports = LoginModel;

@@ -27,4 +27,4 @@ class Out {
 
 }
 
-exports.getInstance = () => new Out();
+module.exports = Out;

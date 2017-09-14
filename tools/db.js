@@ -23,4 +23,4 @@ class Db {
     }
 }
 
-exports.getInstance = () => new Db();
+module.exports = Db;
