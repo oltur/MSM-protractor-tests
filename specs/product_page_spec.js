@@ -56,9 +56,11 @@ describe('MSM site smoke test', function () {
     out.log(`Test name: 'should login, open a Product page and use Go to store button'`);
     h.login()
       .then(() => {
+        out.log(`Opening the basket`);
         return d.get(h.getAbsoluteUrl(pageUrls.reviewCart))
       })
       .then(() => {
+        out.log(`Cleaning the basket if not empty'`);
         return h.findAndClick(by.id("RemoveOrder"))
           .then(() => Promise.resolve(null),
           error => Promise.resolve(null));
