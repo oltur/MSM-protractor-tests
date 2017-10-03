@@ -64,7 +64,7 @@ describe('MSM site smoke test', function () {
     h.login()
       .then(() => {
         out.log("Verifying ListTitle");
-        return h.findAndExpectTextContain(mainPageModel.$listTitle, 'Savvy Buys')
+        return h.findAndExpectTextContain(mainPage.$listTitle, 'Savvy Buys')
       })
       .then(() => {
         out.log("Clicking every menu item");
