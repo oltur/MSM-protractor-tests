@@ -3,9 +3,10 @@ exports.config = {
   framework: 'jasmine',
   seleniumAddress: 'http://localhost:4445/wd/hub',
   specs: [
-    'specs/smoke_test_spec.js',
+    //'specs/smoke_test_spec.js',
     // 'specs/product_page_spec.js',
     // 'specs/composite_products_spec.js',
+    'specs/auchan_test_spec.js',
   ],
   multiCapabilities: [
     // {
@@ -14,12 +15,12 @@ exports.config = {
     {
       browserName: 'chrome',
       chromeOptions: {
-        args: ['show-fps-counter=true']
+        //args: ['show-fps-counter=true']
       }
     }
   ],
   jasmineNodeOpts: {
-    defaultTimeoutInterval: 300000,
+    defaultTimeoutInterval: 15000,//300000,
     showColors: true,
     isVerbose: true
 

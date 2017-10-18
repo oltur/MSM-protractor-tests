@@ -18,10 +18,26 @@ var testData = require('../json/test-data.json');
 
 const HelpersBase = require('./helpersBase.js');
 
+var fs = require('fs');
+
 class Helpers extends HelpersBase {
 
     constructor(b, o, c) {
         super(b, o, c);
+    }
+
+    takeScreenShot(path) {
+        return browser.driver.takeScreenshot()
+            .then(png => {
+                return this.writeScreenShot(png, path);
+            })
+    }
+
+    writeScreenShot(data, path) {
+        var stream = fs.createWriteStream(path);
+        stream.write(new Buffer(data, 'base64'));
+        stream.end();
+        return Promise.resolve(null);
     }
 
     clickEveryMenuItem(index) {
@@ -186,10 +202,14 @@ class Helpers extends HelpersBase {
     }
 
     findAndWaitForVisible(by, root, timeout = undefined) {
-        return (root ? root : this.d).findElement(by).then(elem => {
+        return this.findElement(by, root).then(elem => {
             return this.d.wait(until.elementIsVisible(elem), timeout)
                 .then(() => Promise.resolve(elem));
         });
+    }
+
+    findElement(by, root) {
+        return (root ? root : this.d).findElement(by);
     }
 
     checkStartPage() {
