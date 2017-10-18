@@ -27,6 +27,7 @@ describe('Auchan test', function () {
     out.group();
     d.ignoreSynchronization = true;
     d.get('https://www.auchandrive.fr/drive/prehome/');
+    browser.driver.manage().window().maximize();
   });
 
   afterEach(() => {

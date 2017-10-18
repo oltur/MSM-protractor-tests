@@ -15,7 +15,11 @@ exports.config = {
     {
       browserName: 'chrome',
       chromeOptions: {
-        //args: ['show-fps-counter=true']
+        args: [
+          //'show-fps-counter=true',
+          '--start-maximized'
+        ],
+        
       }
     }
   ],
