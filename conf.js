@@ -6,7 +6,8 @@ exports.config = {
     //'specs/smoke_test_spec.js',
     // 'specs/product_page_spec.js',
     // 'specs/composite_products_spec.js',
-    'specs/auchan_test_spec.js',
+    //'specs/auchan_test_spec.js',
+'specs/async_test_spec.js',
   ],
   multiCapabilities: [
     // {
