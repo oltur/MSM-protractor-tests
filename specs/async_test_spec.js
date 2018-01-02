@@ -59,7 +59,6 @@ describe('Async test', function () {
       "(//a[contains(concat(' ',@class,' '),' libelle-rayon ')])[1]"));
     out.log(`Mouseovering shelves`);
     await browser.driver.actions().mouseMove(c.shelves).perform();
-    //return Promise.resolve(null);
 
     out.log(`Finding link to shelf fruits`);
     d.sleep(3000);
@@ -68,7 +67,6 @@ describe('Async test', function () {
 
     out.log(`Mouseovering shelf fruits`);
     await browser.driver.actions().mouseMove(c.shelves).perform();
-    //return Promise.resolve(null);
 
     out.log(`Taking screenshot`);
     d.sleep(5000);
