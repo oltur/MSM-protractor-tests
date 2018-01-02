@@ -4,10 +4,10 @@ exports.config = {
   seleniumAddress: 'http://localhost:4445/wd/hub',
   specs: [
     //'specs/smoke_test_spec.js',
-    // 'specs/product_page_spec.js',
+     'specs/product_page_spec.js',
     // 'specs/composite_products_spec.js',
     //'specs/auchan_test_spec.js',
-'specs/async_test_spec.js',
+// 'specs/async_test_spec.js',
   ],
   multiCapabilities: [
     // {

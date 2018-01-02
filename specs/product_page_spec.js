@@ -52,26 +52,23 @@ describe('MSM site smoke test', function () {
   //   });
   // }));
 
-  currentSpec = it('should login, open a Product page and use Go to store button', h.getHandler(currentSpec, (done) => {
-    out.log(`Test name: 'should login, open a Product page and use Go to store button'`);
-    h.login()
-      .then(() => {
-        out.log(`Opening the basket`);
-        return d.get(h.getAbsoluteUrl(pageUrls.reviewCart))
-      })
-      .then(() => {
-        out.log(`Cleaning the basket if not empty'`);
-        return h.findAndClick(by.id("RemoveOrder"))
-          .then(() => Promise.resolve(null),
-          error => Promise.resolve(null));
-      })
-      .then(() => {
-        return h.testProductPagesAndGoToStore(testData.goToStore.productIds, 0);
-      })
-      .then(() => done(),
-      error => {
-        throw new Error("Test failed. Reason: " + error + ' ' + error.stack)
-      });
+  currentSpec = it('should login, open a Product page and use Go to store button', h.getHandler(currentSpec, async (done) => {
+    try {
+      out.log(`Test name: 'should login, open a Product page and use Go to store button'`);
+      await h.login();
+
+      out.log(`Opening the basket`);
+      await d.get(h.getAbsoluteUrl(pageUrls.reviewCart))
+
+      out.log(`Cleaning the basket if not empty'`);
+      try {
+        await h.findAndClick(by.id("RemoveOrder"))
+      } catch (error) {}
+      await h.testProductPagesAndGoToStore(testData.goToStore.productIds, 0);
+      
+    } catch (error) {
+      await new Error("Test failed. Reason: " + error + ' ' + error.stack)
+    }
   }));
 
 });
